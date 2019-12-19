@@ -1,0 +1,28 @@
+# MATLAB Production Server connection properties
+mps:
+  protocol: http
+  host: localhost
+  port: 9910
+  archive: demo
+  function: MPSreceive
+  debug: true
+  timeoutms: 9000
+
+# Messaging connection and routing properties
+messageQueue:
+  queueName: demo
+  protocol: amqp
+  host: localhost
+  port: 5672
+  virtualhost: rabbit 
+  credentials: 
+    username: guest
+    password: guest
+  exchange: test1
+  routingkey: data.rabbitmq.*
+  consumer:
+    polltimeoutms: 240000
+    qos: atleastonce
+    
+    
+    
