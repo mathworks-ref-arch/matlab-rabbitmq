@@ -1,4 +1,4 @@
-# MATLAB Interface *for RabbitMQ-MATLAB Production Server Messaging Client*
+# MATLAB Production Server Interface *for RabbitMQ*
 
 MATLAB® interface for the RabbitMQ MATLAB Production Server Client is to support message broker that implements Advanced Message Queuing Protocol (AMQP), standardizes messaging using Producers, Broker and Consumers as well as increases loose coupling and scalability. RabbitMQ client can be deployed in distributed and federated configurations to meet high-scale, high-availability requirements. This interface allows customers to integrate MATLAB Production Server with the RabbitMQ messaging service as an asynchronous or synchronous messaging mechanism that enables reliable communication between system components and IT-MATLAB integration purposes. 
 
