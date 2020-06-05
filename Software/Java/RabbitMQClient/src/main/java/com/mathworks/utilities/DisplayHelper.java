@@ -48,7 +48,7 @@ public class DisplayHelper {
 	}
 
 	public static void displayHeader() {
-		LOG.info("Lumada to MATLAB Production Server Connector");
+		LOG.info("RabbitMQ to MATLAB Production Server Connector");
 		LOG.info("(c) 2018 MathWorks, Inc.");
 	}
 	
