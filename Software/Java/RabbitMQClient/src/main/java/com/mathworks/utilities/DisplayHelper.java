@@ -1,10 +1,5 @@
 package com.mathworks.utilities;
 
-//import java.awt.Graphics;
-//import java.awt.Graphics2D;
-//import java.awt.RenderingHints;
-//import java.awt.image.BufferedImage;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
