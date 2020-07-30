@@ -20,7 +20,7 @@ To build a required JAR file:
 Please refer to the instructions below to get started. The documents provide detailed instructions on setting up and using the interface. The easiest way to fetch this repository and all required dependencies is to clone the top-level repository using:
 
 ```bash
-git clone --recursive https://github.com/mathworks-ref-arch/mathworks-rabbitmq.git
+git clone --recursive https://github.com/mathworks-ref-arch/matlab-rabbitmq.git
 ```
 
 ### Build RabbitMQ Java Client for MATLAB Production Server
@@ -153,7 +153,7 @@ mqHandler.receiveMessage();
 4. [MATLAB Parallel Server™](https://www.mathworks.com/products/distriben.html) (R2017a or later)
 
 ## License, API and Features
-The license for the MATLAB Interface for RabbitMQClient is available in the [LICENSE.TXT](LICENSE.TXT) file in this GitHub repository. This package uses certain third-party content which is licensed under separate license agreements. See the [pom.xml](Software/Java/pom.xml) file for third-party software downloaded at build time.
+The license for the MATLAB Interface for RabbitMQClient is available in the [LICENSE.md](LICENSE.md) file in this GitHub repository. This package uses certain third-party content which is licensed under separate license agreements. See the [pom.xml](Software/Java/pom.xml) file for third-party software downloaded at build time.
 
 ## Enhancement Request
 Provide suggestions for additional features or capabilities using the following link:   

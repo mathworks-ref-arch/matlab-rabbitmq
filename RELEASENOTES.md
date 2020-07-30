@@ -1,6 +1,10 @@
 # MATLAB Interface *for RabbitMQ-MATLAB Production Server Messaging Client®*
 # Release Notes
 
+## Release 0.1.3 (July 2020)
+* Change license file
+* Fix link in documentation
+
 ## Release 0.1.2 (June 2020)
 * Documentation updates
 * Code clean-up
