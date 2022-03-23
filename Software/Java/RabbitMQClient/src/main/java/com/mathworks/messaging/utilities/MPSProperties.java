@@ -12,7 +12,6 @@ public class MPSProperties
 	private Integer port;
 	private String archive;
 	private String function;
-	private Boolean debug;
 	private Integer timeoutms;
 	/**
 	 * @return the port
@@ -49,18 +48,6 @@ public class MPSProperties
 	 */
 	public void setFunction(String function) {
 		this.function = function;
-	}
-	/**
-	 * @return the debug
-	 */
-	public Boolean getDebug() {
-		return debug;
-	}
-	/**
-	 * @param debug the debug to set
-	 */
-	public void setDebug(Boolean debug) {
-		this.debug = debug;
 	}
 	/**
 	 * @return the timeoutms

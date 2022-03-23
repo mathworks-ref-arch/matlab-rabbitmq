@@ -1,0 +1,10 @@
+messageQueue:
+  queueName: RabbitMQ
+  host: localhost
+  port: 5672
+  virtualhost: /
+  credentials: 
+    username: guest
+    password: guest
+  exchange: amq.topic
+  routingkey: test-topic

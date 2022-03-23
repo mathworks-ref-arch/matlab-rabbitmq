@@ -15,7 +15,6 @@ public class MessageQueueProperties
 	private Credentials credentials;
 	private String exchange;
 	private String routingkey;
-	private ConsumerProperties consumer;
 	private String queueName;
 	
 	/**
@@ -66,18 +65,7 @@ public class MessageQueueProperties
 	public void setRoutingkey(String routingkey) {
 		this.routingkey = routingkey;
 	}
-	/**
-	 * @return the consumer
-	 */
-	public ConsumerProperties getConsumer() {
-		return consumer;
-	}
-	/**
-	 * @param consumer the consumer to set
-	 */
-	public void setConsumer(ConsumerProperties consumer) {
-		this.consumer = consumer;
-	}
+
 	public String getHost() {
 		return host;
 	}

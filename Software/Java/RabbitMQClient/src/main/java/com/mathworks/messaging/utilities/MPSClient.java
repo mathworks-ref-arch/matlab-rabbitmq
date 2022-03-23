@@ -11,14 +11,11 @@ import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import com.mathworks.mps.client.MWClient;
 import com.mathworks.mps.client.MWHttpClient;
+import com.mathworks.mps.client.MWHttpClientDefaultConfig;
 import com.mathworks.mps.client.MWInvokable;
 import com.mathworks.utilities.OverrideHandler;
-import com.mathworks.messaging.utilities.ConnectorProperties;
-import com.mathworks.messaging.utilities.MPSProperties;
-import com.mathworks.mps.client.MATLABException;;
 
 public class MPSClient {
 	private MWClient clientHandle= null;
@@ -39,7 +36,12 @@ public class MPSClient {
 		MPSProperties mps = properties.getMps();
 		
 		/* Create a handle to MPS*/
-		this.clientHandle = new MWHttpClient();
+		this.clientHandle = new MWHttpClient(new MWHttpClientDefaultConfig() {
+			@Override
+			public long getTimeOutMs() {
+				return mps.getTimeoutms();
+			}
+		});
 		this.archiveURL = new URL((String) OverrideHandler.getOverride("MPS_PROTOCOL", mps.getProtocol())+
 				"://"+
 				(String) OverrideHandler.getOverride("MPS_HOST", mps.getHost())+

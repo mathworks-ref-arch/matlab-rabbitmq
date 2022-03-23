@@ -1,28 +1,25 @@
 /**
- * MessageQueue Receiver
+ * MessageBroker Class
  * 
- * 		   (c) 2019 MathWorks, Inc.
+ * 		   (c) 2019-2022 MathWorks, Inc.
  */
 
 package com.mathworks.messaging;
 
 import java.io.File;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mathworks.messaging.MessageQueueHandler;
-
-public class MessageReceiver {
+public class MessageBroker {
 
 	 
-	private static final Logger LOG = LoggerFactory.getLogger(MessageReceiver.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MessageBroker.class);
 	
 	public static void main(String[] argv) {
 		
 		MessageQueueHandler mqHandler = null;
 		try {
-			
+			// Create MessageQueueHandler object, set up RabbitMQ and MPS connection, then consume message
 			String configFile = argv[0];
 			System.out.println(" Waiting for messages. To exit press CTRL+C");			
 			mqHandler = new MessageQueueHandler();

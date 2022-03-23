@@ -10,8 +10,6 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mathworks.messaging.MessageQueueHandler;
-
 public class MessageSender {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MessageSender.class);
@@ -20,7 +18,7 @@ public class MessageSender {
 		
 	    MessageQueueHandler mqHandler = null;
 		try {
-			
+			// Create MessageQueueHandler object, set up RabbitMQ connection and send message
 			String configFile = argv[0];
 			mqHandler = new MessageQueueHandler();
 			mqHandler.setupConnectionFactoryFromConfig(new File(configFile));
@@ -34,7 +32,7 @@ public class MessageSender {
 			
 			
 		}catch (Exception e) {
-			LOG.error("sending message has error", e);
+			LOG.error("Error sending message", e);
 						
 		}
 	}

@@ -5,24 +5,19 @@ mps:
   port: 9910
   archive: demo
   function: MPSreceive
-  debug: true
-  timeoutms: 9000
+  timeoutms: 120000
 
 # Messaging connection and routing properties
 messageQueue:
-  queueName: demo
-  protocol: amqp
+  queueName: RabbitMQ
   host: localhost
   port: 5672
-  virtualhost: rabbit 
+  virtualhost: /
   credentials: 
     username: guest
     password: guest
-  exchange: test1
-  routingkey: data.rabbitmq.*
-  consumer:
-    polltimeoutms: 240000
-    qos: atleastonce
+  exchange: amq.topic
+  routingkey: test-topic
     
     
     
