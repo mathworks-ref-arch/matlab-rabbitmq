@@ -1,5 +1,5 @@
 # MATLAB and MATLAB Production Server Interface *for RabbitMQ*
-MATLAB&reg; and MATLAB Production Server&trade; Interface *for RabbitMQ*
+MATLAB&reg; and MATLAB Production Server&trade; Interface *for RabbitMQ™*
 provides an interface between MATLAB as well as MATLAB Production Server and
 RabbitMQ. RabbitMQ implements the Advanced Message Queuing Protocol (AMQP),
 standardizes messaging using Producers, Broker and Consumers as well as
