@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Testing MATLAB and MATLAB Production Server Interface for RabbitMQ &mdash; MATLAB and MATLAB Production Server Interface for RabbitMQ  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/mathworks.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MessageQueueHandler" href="MessageQueueHandler.html" />
+    <link rel="prev" title="RabbitMQ MessageBroker for MATLAB Production Server" href="MessageBroker.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> MATLAB and MATLAB Production Server Interface for RabbitMQ
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">MATLAB and MATLAB Production Server Interface for RabbitMQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="MATLABInterface.html">RabbitMQ MATLAB Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MessageBroker.html">RabbitMQ <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> for MATLAB Production Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Testing MATLAB and MATLAB Production Server Interface <em>for RabbitMQ</em></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-dockerized-rabbitmq-server-for-tests">Running Dockerized RabbitMQ Server for tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-java-unit-tests">Running Java Unit Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-matlab-unit-tests">Running MATLAB Unit Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MessageQueueHandler.html">MessageQueueHandler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Release Notes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MATLAB and MATLAB Production Server Interface for RabbitMQ</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Testing MATLAB and MATLAB Production Server Interface <em>for RabbitMQ</em></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Testing.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="testing-matlab-and-matlab-production-server-interface-for-rabbitmq">
+<h1>Testing MATLAB and MATLAB Production Server Interface <em>for RabbitMQ</em><a class="headerlink" href="#testing-matlab-and-matlab-production-server-interface-for-rabbitmq" title="Permalink to this heading"></a></h1>
+<p>The MATLAB and MATLAB Production Server Interface <em>for RabbitMQ</em> package
+includes unit tests for both main features (<code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> and the MATLAB
+Interface). Both sets of tests require an actual RabbitMQ Server, setup in such
+a way that it is compatible with the configuration in
+<a class="reference internal" href="#Software/Java/RabbitMQClient/src/main/resources/mps.yaml"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">mps.yaml</span></code></span></a> and the
+defaults as used by <code class="docutils literal notranslate"><span class="pre">rabbitmq.ConnectorProperties</span></code>. Luckily it is easy to run
+such a server. A locally run <code class="docutils literal notranslate"><span class="pre">rabbitmq:3-management</span></code> Docker image, matches this
+configuration.</p>
+<section id="running-dockerized-rabbitmq-server-for-tests">
+<h2>Running Dockerized RabbitMQ Server for tests<a class="headerlink" href="#running-dockerized-rabbitmq-server-for-tests" title="Permalink to this heading"></a></h2>
+<p>To start the server use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">--</span><span class="n">rm</span> <span class="o">--</span><span class="n">name</span> <span class="n">rabbitmq</span><span class="o">-</span><span class="k">for</span><span class="o">-</span><span class="n">matlab</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5672</span><span class="p">:</span><span class="mi">5672</span> <span class="o">-</span><span class="n">p</span> <span class="mi">15672</span><span class="p">:</span><span class="mi">15672</span> <span class="n">rabbitmq</span><span class="p">:</span><span class="mi">3</span><span class="o">-</span><span class="n">management</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">5672:5672</span></code> exposes the main RabbitMQ port as used for actual messaging
+and <code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">15672:15672</span></code> exposes the Management Console, making it available on
+<a class="reference external" href="http://localhost:15672/">http://localhost:15672/</a>. <code class="docutils literal notranslate"><span class="pre">-d</span></code> runs the container as a
+daemon, <code class="docutils literal notranslate"><span class="pre">--rm</span></code> disposes the container after it has been stopped and <code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">rabbitmq-for-matlab</span></code> is just to name the container to make it easier to stop.</p>
+<p>To stop it use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">stop</span> <span class="n">rabbitmq</span><span class="o">-</span><span class="k">for</span><span class="o">-</span><span class="n">matlab</span>
+</pre></div>
+</div>
+</section>
+<section id="running-java-unit-tests">
+<h2>Running Java Unit Tests<a class="headerlink" href="#running-java-unit-tests" title="Permalink to this heading"></a></h2>
+<p>To run the Java Unit Tests:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">Software</span><span class="o">/</span><span class="n">Java</span><span class="o">/</span><span class="n">RabbitMQClient</span>
+<span class="n">mvn</span> <span class="n">test</span>
+</pre></div>
+</div>
+</section>
+<section id="running-matlab-unit-tests">
+<h2>Running MATLAB Unit Tests<a class="headerlink" href="#running-matlab-unit-tests" title="Permalink to this heading"></a></h2>
+<p>The MATLAB Unit Tests require the JAR file to have been loaded on the <em>static</em>
+Java class path. Both the polling- as well as the event based subscription
+approach are tested.</p>
+<p>Start MATLAB, then:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="n">Software</span><span class="o">/</span><span class="n">MATLAB</span><span class="o">/</span><span class="n">test</span>
+<span class="nb">runtests</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="MessageBroker.html" class="btn btn-neutral float-left" title="RabbitMQ MessageBroker for MATLAB Production Server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="MessageQueueHandler.html" class="btn btn-neutral float-right" title="MessageQueueHandler" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, MathWorks, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

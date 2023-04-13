@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MessageQueueHandler &mdash; MATLAB and MATLAB Production Server Interface for RabbitMQ  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/mathworks.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Release Notes" href="ReleaseNotes.html" />
+    <link rel="prev" title="Testing MATLAB and MATLAB Production Server Interface for RabbitMQ" href="Testing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> MATLAB and MATLAB Production Server Interface for RabbitMQ
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">MATLAB and MATLAB Production Server Interface for RabbitMQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="MATLABInterface.html">RabbitMQ MATLAB Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MessageBroker.html">RabbitMQ <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> for MATLAB Production Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Testing.html">Testing MATLAB and MATLAB Production Server Interface <em>for RabbitMQ</em></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MessageQueueHandler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#class-usage-for-messagequeuehandler">Class Usage for MessageQueueHandler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Release Notes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MATLAB and MATLAB Production Server Interface for RabbitMQ</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>MessageQueueHandler</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/MessageQueueHandler.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="messagequeuehandler">
+<h1>MessageQueueHandler<a class="headerlink" href="#messagequeuehandler" title="Permalink to this heading"></a></h1>
+<p>This document further explains how the <code class="docutils literal notranslate"><span class="pre">MessageQueueHandler</span></code> class could be used in other Java projects when not running <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> as a standalone application.</p>
+<section id="class-usage-for-messagequeuehandler">
+<h2>Class Usage for MessageQueueHandler<a class="headerlink" href="#class-usage-for-messagequeuehandler" title="Permalink to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Load message queue related properties from yaml file</p></li>
+</ol>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">properties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapper</span><span class="p">.</span><span class="na">readValue</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span><span class="w"> </span><span class="n">ConnectorProperties</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Set up the message queue connection factory based on the yaml properties</p></li>
+</ol>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">factory</span><span class="p">.</span><span class="na">setHost</span><span class="p">((</span><span class="n">String</span><span class="p">)</span><span class="w"> </span><span class="n">OverrideHandler</span><span class="p">.</span><span class="na">getOverride</span><span class="p">(</span><span class="s">&quot;MESSAGEQUEUE_HOST&quot;</span><span class="p">,</span><span class="n">properties</span><span class="p">.</span><span class="na">getMessageQueue</span><span class="p">().</span><span class="na">getHost</span>
+<span class="n">factory</span><span class="p">.</span><span class="na">setPort</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="n">OverrideHandler</span><span class="p">.</span><span class="na">getOverride</span><span class="p">(</span><span class="s">&quot;MESSAGEQUEUE_PORT&quot;</span><span class="p">,</span><span class="n">properties</span><span class="p">.</span><span class="na">getMessageQueue</span><span class="p">().</span><span class="na">getPort</span><span class="p">()));</span>
+<span class="n">factory</span><span class="p">.</span><span class="na">setVirtualHost</span><span class="p">((</span><span class="n">String</span><span class="p">)</span><span class="w"> </span><span class="n">OverrideHandler</span><span class="p">.</span><span class="na">getOverride</span><span class="p">(</span><span class="s">&quot;MESSAGEQUEUE_VIRTUAL_HOST&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">properties</span><span class="p">.</span><span class="na">getMessageQueue</span><span class="p">().</span><span class="na">getVirtualhost</span><span class="p">()));</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Set up the message connection channel from the connection factory</p></li>
+</ol>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="na">newConnection</span><span class="p">();</span>
+<span class="n">QUEUE_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">properties</span><span class="p">.</span><span class="na">getMessageQueue</span><span class="p">().</span><span class="na">getQueueName</span><span class="p">();</span>
+<span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">createChannel</span><span class="p">();</span>
+<span class="c1">// set up Exchange/Queue Binding </span>
+<span class="n">channel</span><span class="p">.</span><span class="na">exchangeDeclare</span><span class="p">((</span><span class="n">String</span><span class="p">)</span><span class="w"> </span><span class="n">OverrideHandler</span><span class="p">.</span><span class="na">getOverride</span><span class="p">(</span><span class="s">&quot;MESSAGEQUEUE_EXCHANGE&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">	</span><span class="n">properties</span><span class="p">.</span><span class="na">getMessageQueue</span><span class="p">().</span><span class="na">getExchange</span><span class="p">()),</span><span class="s">&quot;topic&quot;</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
+<span class="n">channel</span><span class="p">.</span><span class="na">queueDeclare</span><span class="p">(</span><span class="n">QUEUE_NAME</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
+<span class="n">channel</span><span class="p">.</span><span class="na">queueBind</span><span class="p">(</span><span class="n">QUEUE_NAME</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="p">)</span><span class="w"> </span><span class="n">OverrideHandler</span><span class="p">.</span><span class="na">getOverride</span><span class="p">(</span><span class="s">&quot;MESSAGEQUEUE_EXCHANGE&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">	</span><span class="n">properties</span><span class="p">.</span><span class="na">getMessageQueue</span><span class="p">().</span><span class="na">getExchange</span><span class="p">()),</span>
+<span class="w">	</span><span class="p">(</span><span class="n">String</span><span class="p">)</span><span class="w"> </span><span class="n">OverrideHandler</span><span class="p">.</span><span class="na">getOverride</span><span class="p">(</span><span class="s">&quot;MESSAGEQUEUE_ROUTING_KEY&quot;</span><span class="p">,</span>
+<span class="w">	</span><span class="n">properties</span><span class="p">.</span><span class="na">getMessageQueue</span><span class="p">().</span><span class="na">getRoutingkey</span><span class="p">()));</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Send message through either console or a data file</p></li>
+</ol>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">channel</span><span class="p">.</span><span class="na">basicPublish</span><span class="p">(</span><span class="n">properties</span><span class="p">.</span><span class="na">getMessageQueue</span><span class="p">().</span><span class="na">getExchange</span><span class="p">(),</span><span class="w"> </span><span class="n">routingKey</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> 	</span>
+<span class="w">	</span><span class="n">message</span><span class="p">.</span><span class="na">getBytes</span><span class="p">(</span><span class="s">&quot;UTF-8&quot;</span><span class="p">));</span>
+<span class="c1">//Before receiving the message, set up the connection to the MATLAB MPS servers		</span>
+<span class="c1">// Configure the MPS connection</span>
+<span class="n">MPSClient</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MPSClient</span><span class="p">.</span><span class="na">getInstance</span><span class="p">();</span><span class="w"> </span><span class="c1">// Fetches a singleton</span>
+<span class="n">client</span><span class="p">.</span><span class="na">initialize</span><span class="p">(</span><span class="n">properties</span><span class="p">);</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Receive messages then forward to the MATLAB MPS.</p></li>
+</ol>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">DeliverCallback</span><span class="w"> </span><span class="n">deliverCallback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">consumerTag</span><span class="p">,</span><span class="w"> </span><span class="n">delivery</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	 </span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">delivery</span><span class="p">.</span><span class="na">getBody</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;UTF-8&quot;</span><span class="p">);</span>
+<span class="w">	 </span><span class="n">LOG</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;message to be received:&quot;</span><span class="o">+</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+<span class="w">	  </span><span class="n">MPSClient</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MPSClient</span><span class="p">.</span><span class="na">getInstance</span><span class="p">();</span>
+<span class="w">	       </span><span class="n">client</span><span class="p">.</span><span class="na">sendToMPS</span><span class="p">(</span><span class="n">message</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">	       </span><span class="n">channel</span><span class="p">.</span><span class="na">basicConsume</span><span class="p">(</span><span class="n">QUEUE_NAME</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">deliverCallback</span><span class="p">,</span><span class="w"> </span><span class="n">consumerTag</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">});</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Publish messages to queue - Start MessageSender to send the message through MessageQueueHandler.</p></li>
+</ol>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">			</span>
+<span class="n">mqHandler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MessageQueueHandler</span><span class="p">();</span>
+<span class="n">mqHandler</span><span class="p">.</span><span class="na">setupConnectionFactoryFromConfig</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">File</span><span class="p">(</span><span class="n">configFile</span><span class="p">));</span>
+<span class="n">mqHandler</span><span class="p">.</span><span class="na">setupMessageChannel</span><span class="p">();</span>
+<span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="w"> </span><span class="nf">console</span><span class="p">().</span><span class="w"> </span><span class="n">readLine</span><span class="p">(</span><span class="s">&quot;Message:&quot;</span><span class="p">);</span>
+<span class="n">mqHandler</span><span class="p">.</span><span class="na">sendMessage</span><span class="p">(</span><span class="n">routingKey</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>Consume message from queue - Start the MessageBroker to receive messages through MessageQueueHandler.</p></li>
+</ol>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">mqHandler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MessageQueueHandler</span><span class="p">();</span>
+<span class="n">mqHandler</span><span class="p">.</span><span class="na">setupConnectionFactoryFromConfig</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">File</span><span class="p">(</span><span class="n">configFile</span><span class="p">));</span>
+<span class="n">mqHandler</span><span class="p">.</span><span class="na">setupMessageChannel</span><span class="p">();</span>
+<span class="n">mqHandler</span><span class="p">.</span><span class="na">setupMPS</span><span class="p">;</span>
+<span class="n">mqHandler</span><span class="p">.</span><span class="na">receiveMessage</span><span class="p">();</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Testing.html" class="btn btn-neutral float-left" title="Testing MATLAB and MATLAB Production Server Interface for RabbitMQ" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ReleaseNotes.html" class="btn btn-neutral float-right" title="Release Notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, MathWorks, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

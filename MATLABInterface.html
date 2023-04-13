@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RabbitMQ MATLAB Interface &mdash; MATLAB and MATLAB Production Server Interface for RabbitMQ  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/mathworks.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="RabbitMQ MessageBroker for MATLAB Production Server" href="MessageBroker.html" />
+    <link rel="prev" title="MATLAB and MATLAB Production Server Interface for RabbitMQ" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> MATLAB and MATLAB Production Server Interface for RabbitMQ
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">MATLAB and MATLAB Production Server Interface for RabbitMQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Usage</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">RabbitMQ MATLAB Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#building-the-java-package">Building the Java package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-matlabpath-and-java-class-path-startup-m">Configuring MATLABPATH and Java class path <code class="docutils literal notranslate"><span class="pre">startup.m</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#connection-properties">Connection Properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rabbitmq-connectorproperties-class">rabbitmq.ConnectorProperties class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-files">Configuration Files</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rabbitmq-producer-for-publishing-messages-rabbitmq-producer">RabbitMQ Producer for publishing messages <code class="docutils literal notranslate"><span class="pre">rabbitmq.Producer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rabbitmq-consumer-for-receiving-messages-rabbitmq-consumer">RabbitMQ Consumer for receiving messages <code class="docutils literal notranslate"><span class="pre">rabbitmq.Consumer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#event-based-approach">Event Based Approach</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polling-approach">Polling Approach</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#deployment">Deployment</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MessageBroker.html">RabbitMQ <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> for MATLAB Production Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Testing.html">Testing MATLAB and MATLAB Production Server Interface <em>for RabbitMQ</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="MessageQueueHandler.html">MessageQueueHandler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Release Notes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MATLAB and MATLAB Production Server Interface for RabbitMQ</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>RabbitMQ MATLAB Interface</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/MATLABInterface.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rabbitmq-matlab-interface">
+<h1>RabbitMQ MATLAB Interface<a class="headerlink" href="#rabbitmq-matlab-interface" title="Permalink to this heading"></a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<section id="building-the-java-package">
+<h3>Building the Java package<a class="headerlink" href="#building-the-java-package" title="Permalink to this heading"></a></h3>
+<p>Refer to the <span class="xref myst">Getting Started Section in
+README.md</span> for
+instructions on building the required JAR-file.</p>
+</section>
+<section id="configuring-matlabpath-and-java-class-path-startup-m">
+<h3>Configuring MATLABPATH and Java class path <code class="docutils literal notranslate"><span class="pre">startup.m</span></code><a class="headerlink" href="#configuring-matlabpath-and-java-class-path-startup-m" title="Permalink to this heading"></a></h3>
+<p>Before using the package in MATLAB, the Java client library needs to be loaded
+on the MATLAB Java class path and the <code class="docutils literal notranslate"><span class="pre">Software/MATLAB/app</span></code> directory needs to
+be added to the MATLABPATH. This can be accomplished by running the <code class="docutils literal notranslate"><span class="pre">startup</span></code>
+function from the <code class="docutils literal notranslate"><span class="pre">Software/MATLAB</span></code> directory.</p>
+<p>Note that this will load the JAR-file on the <em>dynamic</em> class path. Not all
+functionality is supported when the JAR-file is loaded on the dynamic class
+path, see below. See the <a class="reference external" href="https://www.mathworks.com/help/matlab/matlab_external/java-class-path.html">MATLAB
+documentation</a>
+to learn more about the Java class path in general and on how to add the
+JAR-file to the static class path if desired/needed.</p>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<section id="connection-properties">
+<h3>Connection Properties<a class="headerlink" href="#connection-properties" title="Permalink to this heading"></a></h3>
+<p>When working with <code class="docutils literal notranslate"><span class="pre">rabbitmq.Producer</span></code> and <code class="docutils literal notranslate"><span class="pre">rabbitmq.Consumer</span></code> in MATLAB, various
+connection properties need to be specified. These can be specified with the help
+of the <code class="docutils literal notranslate"><span class="pre">rabbitmq.ConnectorProperties</span></code> class or using YAML configuration files.</p>
+<section id="rabbitmq-connectorproperties-class">
+<h4>rabbitmq.ConnectorProperties class<a class="headerlink" href="#rabbitmq-connectorproperties-class" title="Permalink to this heading"></a></h4>
+<p><strong>rabbitmq.ConnectorProperties</strong> has various properties:</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">host</dt>
+<dd class="field-odd"><p>Hostname or IP of the RabbitMQ Server.<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">&quot;localhost&quot;</span></code></p>
+</dd>
+<dt class="field-even">port</dt>
+<dd class="field-even"><p>Port the RabbitMQ Server runs on.<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">5672</span></code></p>
+</dd>
+<dt class="field-odd">virtualhost</dt>
+<dd class="field-odd"><p>RabbitMQ Virtual Host.<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">&quot;/&quot;</span></code></p>
+</dd>
+<dt class="field-even">exchange</dt>
+<dd class="field-even"><p>Exchange to work with on RabbitMQ.<br />
+<em>Default:</em> Default <code class="docutils literal notranslate"><span class="pre">rabbitmq.ExchangeProperties</span></code></p>
+</dd>
+<dt class="field-odd">queue</dt>
+<dd class="field-odd"><p>Queue to work with on RabbitMQ Server.<br />
+<em>Default:</em> Default <code class="docutils literal notranslate"><span class="pre">rabbitmq.QueueProperties</span></code></p>
+</dd>
+<dt class="field-even">credentials</dt>
+<dd class="field-even"><p>RabbitMQ server credentials.<br />
+<em>Default:</em> Default <code class="docutils literal notranslate"><span class="pre">rabbitmq.Credentials</span></code></p>
+</dd>
+<dt class="field-odd">routingkey</dt>
+<dd class="field-odd"><p>Routing key to subscribe to or poll on - only used for Consumer, when working with Producer the routing key is specified on a per message basis when publishing a message.<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">&quot;test-topic&quot;</span></code></p>
+</dd>
+</dl>
+<p>Where, as can be seen, properties <code class="docutils literal notranslate"><span class="pre">exchange</span></code>, <code class="docutils literal notranslate"><span class="pre">queue</span></code> and <code class="docutils literal notranslate"><span class="pre">credentials</span></code> are
+in turn other MATLAB classes:</p>
+<p><strong>rabbitmq.ExchangeProperties</strong></p>
+<dl class="myst field-list simple">
+<dt class="field-odd">name</dt>
+<dd class="field-odd"><p>Name of the exchange.<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">&quot;amq.topic&quot;</span></code></p>
+</dd>
+<dt class="field-even">type</dt>
+<dd class="field-even"><p>Type of exchange.<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">&quot;topic&quot;</span></code></p>
+</dd>
+<dt class="field-odd">create</dt>
+<dd class="field-odd"><p>See <a class="reference internal" href="MessageBroker.html#noteoncreate"><span class="std std-ref">the note on create in MessageBroker</span></a>.<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+</dd>
+<dt class="field-even">durable</dt>
+<dd class="field-even"><p>Only relevant if <code class="docutils literal notranslate"><span class="pre">create</span></code> = <code class="docutils literal notranslate"><span class="pre">true</span></code>, create a durable exchange or not<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+</dd>
+<dt class="field-odd">autoDelete</dt>
+<dd class="field-odd"><p>Only relevant if <code class="docutils literal notranslate"><span class="pre">create</span></code> = <code class="docutils literal notranslate"><span class="pre">true</span></code>, create an autoDelete exchange or not<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">false</span></code></p>
+</dd>
+<dt class="field-even">internal</dt>
+<dd class="field-even"><p>Only relevant if <code class="docutils literal notranslate"><span class="pre">create</span></code> = <code class="docutils literal notranslate"><span class="pre">true</span></code>, create an internal exchange or not<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">false</span></code></p>
+</dd>
+<dt class="field-odd">arguments</dt>
+<dd class="field-odd"><p>Only relevant if <code class="docutils literal notranslate"><span class="pre">create</span></code> = <code class="docutils literal notranslate"><span class="pre">true</span></code>, allows setting additional arguments. Use the <code class="docutils literal notranslate"><span class="pre">put</span></code> method to add additional arguments. <br />
+<em>Default:</em> Empty <code class="docutils literal notranslate"><span class="pre">HashMap</span></code></p>
+</dd>
+</dl>
+<p><strong>rabbitmq.QueueProperties</strong></p>
+<dl class="myst field-list simple">
+<dt class="field-odd">name</dt>
+<dd class="field-odd"><p>Name of the queue.<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">&quot;RabbitMQ&quot;</span></code></p>
+</dd>
+<dt class="field-even">create</dt>
+<dd class="field-even"><p>See See <a class="reference internal" href="MessageBroker.html#noteoncreate"><span class="std std-ref">the note on create in MessageBroker</span></a>.<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+</dd>
+<dt class="field-odd">durable</dt>
+<dd class="field-odd"><p>Only relevant if <code class="docutils literal notranslate"><span class="pre">create</span></code> = <code class="docutils literal notranslate"><span class="pre">true</span></code>, create a durable queue or not.<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">false</span></code></p>
+</dd>
+<dt class="field-even">exclusive</dt>
+<dd class="field-even"><p>Only relevant if <code class="docutils literal notranslate"><span class="pre">create</span></code> = <code class="docutils literal notranslate"><span class="pre">true</span></code>, create an exclusive queue or not.<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">false</span></code></p>
+</dd>
+<dt class="field-odd">autoDelete</dt>
+<dd class="field-odd"><p>Only relevant if <code class="docutils literal notranslate"><span class="pre">create</span></code> = <code class="docutils literal notranslate"><span class="pre">true</span></code>, create an autoDelete queue or not.<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">false</span></code></p>
+</dd>
+<dt class="field-even">arguments</dt>
+<dd class="field-even"><p>Only relevant if <code class="docutils literal notranslate"><span class="pre">create</span></code> = <code class="docutils literal notranslate"><span class="pre">true</span></code>, allows setting additional arguments. Use the <code class="docutils literal notranslate"><span class="pre">put</span></code> method to add additional arguments. <br />
+<em>Default:</em> Empty <code class="docutils literal notranslate"><span class="pre">HashMap</span></code></p>
+</dd>
+</dl>
+<p><strong>rabbitmq.Credentials</strong></p>
+<dl class="myst field-list simple">
+<dt class="field-odd">username</dt>
+<dd class="field-odd"><p>Username<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">&quot;guest&quot;</span></code></p>
+</dd>
+<dt class="field-even">password</dt>
+<dd class="field-even"><p>Password<br />
+<em>Default:</em> <code class="docutils literal notranslate"><span class="pre">&quot;guest&quot;</span></code></p>
+</dd>
+</dl>
+<p>Setting properties values can be done through traditional MATLAB class syntax:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Create an instance</span>
+<span class="n">c</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="n">rabbitmq</span><span class="p">.</span><span class="n">ConnectorProperties</span><span class="p">;</span>
+<span class="c">% Set a property value</span>
+<span class="n">c</span><span class="p">.</span><span class="n">host</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;myHost&quot;</span><span class="p">;</span>
+<span class="c">% Set a property of one of the &quot;nested&quot; settings</span>
+<span class="n">c</span><span class="p">.</span><span class="n">queue</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;myQueue&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>But (with the exception of the <code class="docutils literal notranslate"><span class="pre">arguments</span></code> property) they can also be set by providing Name-Value pairs corresponding to property
+name and the value it is to be set to as inputs to the constructor.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Create instance and immediately set host to myHost and port to 1234</span>
+<span class="n">c</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="n">rabbitmq</span><span class="p">.</span><span class="n">ConnectorProperties</span><span class="p">(</span><span class="s">&quot;host&quot;</span><span class="p">,</span><span class="s">&quot;myHost&quot;</span><span class="p">,</span><span class="s">&quot;port&quot;</span><span class="p">,</span><span class="mi">1234</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>To immediately set “nested” settings, use the same trick on one of the nested
+classes:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Create the QueueProperties with name and durable set</span>
+<span class="n">qp</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">rabbitmq</span><span class="p">.</span><span class="n">QueueProperties</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="s">&quot;myQueue&quot;</span><span class="p">,</span><span class="s">&quot;durable&quot;</span><span class="p">,</span><span class="nb">true</span><span class="p">);</span>
+<span class="c">% Create ConnectorProperties with these QueueProperties set</span>
+<span class="n">c</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="n">rabbitmq</span><span class="p">.</span><span class="n">ConnectorProperties</span><span class="p">(</span><span class="s">&quot;queue&quot;</span><span class="p">,</span><span class="n">qp</span><span class="p">);</span>
+
+<span class="c">% Or this could even be done one big single call then</span>
+<span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">rabbitmq</span><span class="p">.</span><span class="n">ConnectorProperties</span><span class="p">(</span><span class="s">&quot;queue&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
+<span class="w">    </span><span class="n">rabbitmq</span><span class="p">.</span><span class="n">QueueProperties</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="s">&quot;myQueue&quot;</span><span class="p">,</span><span class="s">&quot;durable&quot;</span><span class="p">,</span><span class="nb">true</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>To add additional arguments through the <code class="docutils literal notranslate"><span class="pre">arguments</span></code> property, use the put method:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Create QueueProperties with some properties already set</span>
+<span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">rabbitmq</span><span class="p">.</span><span class="n">ConnectorProperties</span><span class="p">(</span><span class="s">&quot;queue&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
+<span class="w">    </span><span class="n">rabbitmq</span><span class="p">.</span><span class="n">QueueProperties</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="s">&quot;myQueue&quot;</span><span class="p">,</span><span class="s">&quot;durable&quot;</span><span class="p">,</span><span class="nb">true</span><span class="p">));</span>
+<span class="c">% Then in a separate step add additional arguments, for example</span>
+<span class="n">c</span><span class="p">.</span><span class="n">queue</span><span class="p">.</span><span class="n">arguments</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&#39;x-max-length&#39;</span><span class="p">,</span><span class="mi">42</span><span class="p">);</span>
+<span class="c">% Similarly for exchange</span>
+<span class="n">c</span><span class="p">.</span><span class="n">exchange</span><span class="p">.</span><span class="n">arguments</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&#39;alternate-exchange&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;my-ea&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-files">
+<h4>Configuration Files<a class="headerlink" href="#configuration-files" title="Permalink to this heading"></a></h4>
+<p>The configuration file follows the same RabbitMQ related options as the
+configuration file for the MATLAB Production Server interface:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Messaging connection and routing properties</span>
+<span class="nt">messageQueue</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">queue</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RabbitMQ</span><span class="w">          </span><span class="c1"># Name of the Queue on RabbitMQ Server</span>
+<span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">            </span><span class="c1"># Creates/verifies whether queue exists</span>
+<span class="w">    </span><span class="nt">durable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">          </span><span class="c1"># Work with a durable queue or not</span>
+<span class="w">    </span><span class="nt">exclusive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">        </span><span class="c1"># Work with an exclusive queue or not</span>
+<span class="w">    </span><span class="nt">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">       </span><span class="c1"># Work with an auto delete queue or not</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w">              </span><span class="c1"># Set additional arguments, can be omitted entirely</span>
+<span class="w">      </span><span class="nt">x-max-length</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span><span class="w">      </span><span class="c1"># For example, set the maximum queue length</span>
+<span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span><span class="w">           </span><span class="c1"># Hostname or IP of the RabbitMQ Server</span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5672</span><span class="w">                </span><span class="c1"># Port the RabbitMQ Server runs on</span>
+<span class="w">  </span><span class="nt">virtualhost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span><span class="w">            </span><span class="c1"># RabbitMQ Virtual Host</span>
+<span class="w">  </span><span class="nt">credentials</span><span class="p">:</span><span class="w"> </span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">guest</span><span class="w">         </span><span class="c1"># RabbitMQ username</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">guest</span><span class="w">         </span><span class="c1"># RabbitMQ password</span>
+<span class="w">  </span><span class="nt">exchange</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">amq.topic</span><span class="w">         </span><span class="c1"># Exchange to work with on RabbitMQ</span>
+<span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">            </span><span class="c1"># Creates/verifies whether exchange exists</span>
+<span class="w">    </span><span class="nt">durable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">           </span><span class="c1"># Work with a durable exchange or not</span>
+<span class="w">    </span><span class="nt">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">       </span><span class="c1"># Work with an auto delete exchange or not</span>
+<span class="w">    </span><span class="nt">internal</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">         </span><span class="c1"># Work with an internal exchange or not</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w">              </span><span class="c1"># Set additional arguments, can be omitted entirely</span>
+<span class="w">      </span><span class="nt">alternate-exchange</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-ea</span><span class="w"> </span><span class="c1"># For example alternate-exchange</span>
+<span class="w">  </span><span class="nt">routingkey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-topic</span><span class="w">    </span><span class="c1"># Routing key to subscribe to</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">arguments</span></code> option can be omitted entirely for both <code class="docutils literal notranslate"><span class="pre">queue</span></code> and <code class="docutils literal notranslate"><span class="pre">exchange</span></code> if it is not necessary to set additional arguments. There is no fixed set of arguments which can be added and the entered argument names are not checked by the interface; they are passed on the server as-is. Check the RabbitMQ documentation to learn more about which exact arguments can be configured.</p>
+</div>
+</section>
+</section>
+<section id="rabbitmq-producer-for-publishing-messages-rabbitmq-producer">
+<h3>RabbitMQ Producer for publishing messages <code class="docutils literal notranslate"><span class="pre">rabbitmq.Producer</span></code><a class="headerlink" href="#rabbitmq-producer-for-publishing-messages-rabbitmq-producer" title="Permalink to this heading"></a></h3>
+<p>To work with <code class="docutils literal notranslate"><span class="pre">rabbitmq.Producer</span></code> in MATLAB, first create an instance with
+<code class="docutils literal notranslate"><span class="pre">rabbitmq.ConnectorProperties</span></code> or configuration YAML-file as input:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Create a Producer based on a configuration file</span>
+<span class="n">producer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">rabbitmq</span><span class="p">.</span><span class="n">Producer</span><span class="p">(</span><span class="nb">fullfile</span><span class="p">(</span><span class="n">rabbitMQProjectRoot</span><span class="p">,</span><span class="s">&#39;config&#39;</span><span class="p">,</span><span class="s">&#39;example.yaml&#39;</span><span class="p">));</span>
+<span class="c">% Or alternatively using ConnectorProperties</span>
+<span class="n">configuration</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">rabbitmq</span><span class="p">.</span><span class="n">ConnectorProperties</span><span class="p">();</span>
+<span class="n">producer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">rabbitmq</span><span class="p">.</span><span class="n">Producer</span><span class="p">(</span><span class="n">configuration</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Then to send a message use <code class="docutils literal notranslate"><span class="pre">publish</span></code> with a routingkey and the actual
+message as input:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">producer</span><span class="p">.</span><span class="n">publish</span><span class="p">(</span><span class="s">&#39;my-routing-key&#39;</span><span class="p">,</span><span class="s">&#39;Hello World&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="rabbitmq-consumer-for-receiving-messages-rabbitmq-consumer">
+<h3>RabbitMQ Consumer for receiving messages <code class="docutils literal notranslate"><span class="pre">rabbitmq.Consumer</span></code><a class="headerlink" href="#rabbitmq-consumer-for-receiving-messages-rabbitmq-consumer" title="Permalink to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">rabbitmq.Consumer</span></code> offers two approaches for receiving messages from RabbitMQ
+in MATLAB. An event-based approach and a polling approach. These two different
+approaches correspond to the push- and pull approaches respectively, as
+<a class="reference external" href="https://www.rabbitmq.com/api-guide.html#consuming">described in the RabbitMQ Java
+API</a>. As noted in this
+RabbitMQ Java API documentation the push (i.e. in MATLAB event based approach)
+is recommended. However, in MATLAB this will require the JAR-file to be loaded
+on the <em>static</em> Java class path rather than on the <em>dynamic</em> Java class path.</p>
+<section id="event-based-approach">
+<h4>Event Based Approach<a class="headerlink" href="#event-based-approach" title="Permalink to this heading"></a></h4>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="nf">consumer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">EventBasedConsumerExample</span>
+<span class="w">    </span><span class="c">% Create the Consumer  with configuration file as input. Working with</span>
+<span class="w">    </span><span class="c">% rabbitmq.ConnectorProperties is supported here as well. Further set</span>
+<span class="w">    </span><span class="c">% eventBased = true to indicate to work with the event based approach </span>
+<span class="w">    </span><span class="n">consumer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">rabbitmq</span><span class="p">.</span><span class="n">Consumer</span><span class="p">(</span><span class="w"> </span><span class="k">...</span>
+<span class="w">        </span><span class="nb">fullfile</span><span class="p">(</span><span class="n">rabbitMQProjectRoot</span><span class="p">,</span><span class="s">&#39;config&#39;</span><span class="p">,</span><span class="s">&#39;example.yaml&#39;</span><span class="p">),</span><span class="w"> </span><span class="k">...</span>
+<span class="w">        </span><span class="nb">true</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c">% Add a listener to the MessageReceived event</span>
+<span class="w">    </span><span class="nb">addlistener</span><span class="p">(</span><span class="n">consumer</span><span class="p">,</span><span class="s">&#39;MessageReceived&#39;</span><span class="p">,@</span><span class="n">onMessageReceived</span><span class="p">)</span>
+
+
+<span class="k">function</span><span class="w"> </span><span class="nf">onMessageReceived</span><span class="p">(</span>~,message<span class="p">)</span>
+<span class="w">    </span><span class="c">% In the listener, as an example simply print the message</span>
+<span class="w">    </span><span class="nb">fprintf</span><span class="p">(</span><span class="s">&#39;Message received: %s\n&#39;</span><span class="p">,</span><span class="n">message</span><span class="p">.</span><span class="n">message</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="polling-approach">
+<h4>Polling Approach<a class="headerlink" href="#polling-approach" title="Permalink to this heading"></a></h4>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="nf">PollBasedConsumerExample</span>
+<span class="w">    </span><span class="c">% Create the Consumer  with configuration file as input working with</span>
+<span class="w">    </span><span class="c">% rabbitmq.ConnectorProperties is supported here as well. Further set</span>
+<span class="w">    </span><span class="c">% eventBased = false to indicate to work with the polling approach</span>
+<span class="w">    </span><span class="n">consumer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">rabbitmq</span><span class="p">.</span><span class="n">Consumer</span><span class="p">(</span><span class="w"> </span><span class="k">...</span>
+<span class="w">        </span><span class="nb">fullfile</span><span class="p">(</span><span class="n">rabbitMQProjectRoot</span><span class="p">,</span><span class="s">&#39;config&#39;</span><span class="p">,</span><span class="s">&#39;example.yaml&#39;</span><span class="p">),</span><span class="w"> </span><span class="k">...</span>
+<span class="w">        </span><span class="nb">false</span><span class="p">);</span>
+<span class="w">    </span><span class="c">% Now actually start polling</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">% In this example receive up to 3 messages then stop</span>
+<span class="w">    </span><span class="n">numReceived</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="nb">fprintf</span><span class="p">(</span><span class="s">&#39;Polling for messages...&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="c">% As long as we have not received three messages yet</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="n">numReceived</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span>
+<span class="w">        </span><span class="c">% Poll for a message</span>
+<span class="w">        </span><span class="n">message</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">consumer</span><span class="p">.</span><span class="n">pollMessage</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="o">~</span><span class="nb">isempty</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="c">% If a message was received </span>
+<span class="w">            </span><span class="c">% Display it</span>
+<span class="w">            </span><span class="nb">fprintf</span><span class="p">(</span><span class="s">&#39;\nMessage Received: %s\n&#39;</span><span class="p">,</span><span class="n">message</span><span class="p">);</span>
+<span class="w">            </span><span class="c">% Increase the counter</span>
+<span class="w">            </span><span class="n">numReceived</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">numReceived</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="nb">fprintf</span><span class="p">(</span><span class="s">&#39;Polling for messages...&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">end</span>
+<span class="w">        </span><span class="nb">fprintf</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="c">% Pause for a second before polling again</span>
+<span class="w">        </span><span class="nb">pause</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="c">% After 3 messages have been received</span>
+<span class="w">    </span><span class="nb">fprintf</span><span class="p">(</span><span class="s">&#39;stopped.\n&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="deployment">
+<h2>Deployment<a class="headerlink" href="#deployment" title="Permalink to this heading"></a></h2>
+<p>When using this MATLAB Package in a MATLAB function deployed to MATLAB
+Production Server in order to send back replies/results to a RabbitMQ client (or
+in any other MATLAB Compiler (SDK) deployed component) it is important the
+correct functionality gets compiled into the deployed component. The MATLAB
+Compiler (SDK) dependency analysis should be able to automatically detect and
+include the MATLAB dependencies by itself but the JAR-file must be added
+manually to the component by adding it to the “Additional files required for
+your component to run” in the Compiler App or by using the <code class="docutils literal notranslate"><span class="pre">-a</span></code> option when
+working with <code class="docutils literal notranslate"><span class="pre">mcc</span></code> on the command line.</p>
+<p>Any JAR-file compiled into a deployed component will be automatically added to
+the Java class path at runtime and any functions compiled into the component
+will be automatically on the MATLABPATH at runtime; so there is no need then to
+explicitly call <code class="docutils literal notranslate"><span class="pre">startup</span></code> in the deployed component. If possible the JAR-file is
+added to the <em>static</em> class path but there may be circumstances in which this is
+not possible and then it is loaded on the <em>dynamic</em> class path; this may make
+the event based consumer approach unavailable.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="MATLAB and MATLAB Production Server Interface for RabbitMQ" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="MessageBroker.html" class="btn btn-neutral float-right" title="RabbitMQ MessageBroker for MATLAB Production Server" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, MathWorks, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

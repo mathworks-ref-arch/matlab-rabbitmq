@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RabbitMQ MessageBroker for MATLAB Production Server &mdash; MATLAB and MATLAB Production Server Interface for RabbitMQ  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/mathworks.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Testing MATLAB and MATLAB Production Server Interface for RabbitMQ" href="Testing.html" />
+    <link rel="prev" title="RabbitMQ MATLAB Interface" href="MATLABInterface.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> MATLAB and MATLAB Production Server Interface for RabbitMQ
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">MATLAB and MATLAB Production Server Interface for RabbitMQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Usage</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="MATLABInterface.html">RabbitMQ MATLAB Interface</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">RabbitMQ <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> for MATLAB Production Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#message-datatype">Message Datatype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dataflow">Dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#building-the-java-package">Building the Java package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#further-configuration-and-testing-the-setup">Further configuration and testing the setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Testing.html">Testing MATLAB and MATLAB Production Server Interface <em>for RabbitMQ</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="MessageQueueHandler.html">MessageQueueHandler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Release Notes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MATLAB and MATLAB Production Server Interface for RabbitMQ</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>RabbitMQ <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> for MATLAB Production Server</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/MessageBroker.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rabbitmq-messagebroker-for-matlab-production-server">
+<h1>RabbitMQ <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> for MATLAB Production Server<a class="headerlink" href="#rabbitmq-messagebroker-for-matlab-production-server" title="Permalink to this heading"></a></h1>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code>, is essentially a RabbitMQ (AMQP) Consumer which can receive
+messages from a RabbitMQ Server which it then passes along as input to a
+function deployed ot MATLAB Production Server. The MATLAB function is assumed to
+have exactly one input which is the message as character array.</p>
+<div class="mermaid">
+            flowchart
+  client(Message Producer) -- publish message --&gt; server[(RabbitMQ Server)]-- deliver message --&gt; MessageBroker[MessageBroker] --&quot;call with message as input&quot;--&gt; mps(MATLAB Production Server)
+  MessageBroker -. subscribe .-&gt; server
+        </div><p>As RabbitMQ supports various protocols (AMQP as native protocol but also MQTT
+and STOMP as plugins), the Message Producer can be any client supporting any of
+those protocols.</p>
+</section>
+<section id="message-datatype">
+<h2>Message Datatype<a class="headerlink" href="#message-datatype" title="Permalink to this heading"></a></h2>
+<p>RabbitMQ messages <em>in general</em> are simply raw bytes, this package implicitly
+assumes however that all messages are UTF-8 encoded strings. Consider encoding
+your messages in JSON format if “more complex” data structures need to be
+represented in the messages. On the MATLAB end the <code class="docutils literal notranslate"><span class="pre">jsondecode</span></code> function can be
+used to parse the JSON string into a MATLAB structure.</p>
+</section>
+<section id="dataflow">
+<h2>Dataflow<a class="headerlink" href="#dataflow" title="Permalink to this heading"></a></h2>
+<p>A full workflow with this package could look like the following:</p>
+<div class="mermaid">
+            sequenceDiagram
+    autonumber
+    participant MessageSender
+    participant RabbitMQ Server
+    participant MessageBroker
+    participant MATLAB Production Server
+    note over MessageSender,MATLAB Production Server: MessageBroker Startup
+    MessageBroker--&gt;&gt;RabbitMQ Server: subscribes
+    note over MessageSender,MATLAB Production Server: For each message/request sent by MessageSender
+    opt
+        MessageSender--&gt;&gt;RabbitMQ Server: binds
+    end
+    MessageSender-&gt;&gt;RabbitMQ Server: message
+    RabbitMQ Server-&gt;&gt;+MessageBroker: message
+    MessageBroker-&gt;&gt;+MATLAB Production Server: message
+    opt
+        MATLAB Production Server-&gt;&gt;-RabbitMQ Server: reply
+        deactivate MessageBroker
+        RabbitMQ Server-&gt;&gt;MessageSender: reply
+    end
+        </div><ol class="arabic">
+<li><p>Upon startup <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> connects to the configured RabbitMQ Server and
+subscribes to the specified <code class="docutils literal notranslate"><span class="pre">queue</span></code> on the specified <code class="docutils literal notranslate"><span class="pre">exchange</span></code> with
+specified <code class="docutils literal notranslate"><span class="pre">routingkey</span></code>.</p></li>
+<li><p>If a MessageSender expects a reply of the function deployed to MATLAB
+Production Server through RabbitMQ, it first subscribes to the RabbitMQ
+server as well, if using the same <code class="docutils literal notranslate"><span class="pre">queue</span></code> on the same <code class="docutils literal notranslate"><span class="pre">exchange</span></code> make sure to
+use a different <code class="docutils literal notranslate"><span class="pre">routingkey</span></code> (to avoid infinite loops where the response
+would trigger another MATLAB Production Server call).</p></li>
+<li><p>The MessageSender (this can literally be the <code class="docutils literal notranslate"><span class="pre">MessageSender</span></code> example client
+included in this package or any other RabbitMQ Client) sends a message with a
+<code class="docutils literal notranslate"><span class="pre">routingkey</span></code> to a <code class="docutils literal notranslate"><span class="pre">queue</span></code> on the RabbitMQ Server.</p></li>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">queue</span></code> and <code class="docutils literal notranslate"><span class="pre">routingkey</span></code> match the ones <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> has subscribed
+to, the RabbitMQ Server delivers to message to <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> uses MATLAB Production Server Java client to call the
+specified <code class="docutils literal notranslate"><span class="pre">function</span></code> in the specified <code class="docutils literal notranslate"><span class="pre">archive</span></code> with the message as input.
+MATLAB Production Server will then process this request. If the package is
+used to simply trigger a function call without outputs the flow ends here.</p></li>
+<li><p>If the MATLAB code needs to return an output to the client, the MATLAB code
+can use <code class="docutils literal notranslate"><span class="pre">rabbitmq.Producer</span></code> to send a message with the <code class="docutils literal notranslate"><span class="pre">routingkey</span></code> the
+client is bound to, to the RabbitMQ Server.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note: this bypasses <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code>. <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> does not do anything
+with the “MATLAB style output” of the function deployed to MATLAB
+Production Server. The MATLAB code deployed to MATLAB Production Server
+has to explicitly use <code class="docutils literal notranslate"><span class="pre">rabbitmq.Producer</span></code> in the MATLAB code if a reply is
+to be send over RabbitMQ.</p>
+</div>
+</li>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">routingkey</span></code>, <code class="docutils literal notranslate"><span class="pre">queue</span></code> and <code class="docutils literal notranslate"><span class="pre">exchange</span></code> match the one the client has
+subscribed to, the RabbitMQ server will deliver the reply to the client.</p></li>
+</ol>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<section id="building-the-java-package">
+<h3>Building the Java package<a class="headerlink" href="#building-the-java-package" title="Permalink to this heading"></a></h3>
+<p>Refer to the <span class="xref myst">Getting Started Section in
+README.md</span> for
+instructions on building the required JAR-file.</p>
+</section>
+<section id="further-configuration-and-testing-the-setup">
+<h3>Further configuration and testing the setup<a class="headerlink" href="#further-configuration-and-testing-the-setup" title="Permalink to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Before continuing it is good to verify that the RabbitMQ Server is up and
+running correctly and can be accessed, for example by accessing the Web Admin
+console which typically runs on port 15672, so for a local server check
+http://localhost:15672/.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>See the <a class="reference external" href="https://www.rabbitmq.com/access-control.html">RabbitMQ Authentication, Authorization, Access Control
+documentation</a> on how to
+configure credentials for remote access, TLS support, authentication, etc.</p>
+</div>
+</li>
+<li><p>For an initial test, MATLAB Compiler SDK’s MATLAB Production Server testing
+interface can be used rather than an actual MATLAB Production Server
+instance running compiled CTF archives:</p>
+<ol class="arabic simple">
+<li><p>In MATLAB start the <code class="docutils literal notranslate"><span class="pre">Production</span> <span class="pre">Server</span> <span class="pre">Compiler</span></code> App.</p></li>
+<li><p>Enter <code class="docutils literal notranslate"><span class="pre">demo</span></code> as archive name.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Software/MATLAB/examples/MPSreceive.m</span></code> as exported function.</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Test</span> <span class="pre">Client</span></code>.</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Start</span></code> to start the test server.</p></li>
+</ol>
+</li>
+<li><p>Open <code class="docutils literal notranslate"><span class="pre">Software/Java/RabbitMQClient/src/main/resources/mps.yaml</span></code> and update
+the options to match your configuration.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">arguments</span></code> for <code class="docutils literal notranslate"><span class="pre">queue</span></code> and <code class="docutils literal notranslate"><span class="pre">exchange</span></code> will likely have to be removed, they are not often used and shown here mainly for illustrative purposes to show <em>where</em> these can be added <em>if</em> they are needed. There is no fixed set of arguments which can be added and argument names are not verified by <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code>; they are send to the server as-is. Check the RabbitMQ documentation to learn more about the argument its supports.</p>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># MATLAB Production Server connection properties</span>
+<span class="nt">mps</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span><span class="w">            </span><span class="c1"># Protocol used by the MPS Instance</span>
+<span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span><span class="w">           </span><span class="c1"># Hostname or IP of the MPS Instance</span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9910</span><span class="w">                </span><span class="c1"># Port the MPS Instance runs on</span>
+<span class="w">  </span><span class="nt">archive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo</span><span class="w">             </span><span class="c1"># Name of the CTF containing the function which</span>
+<span class="w">                            </span><span class="c1"># is to be called on MPS when a message received</span>
+<span class="w">  </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MPSreceive</span><span class="w">      </span><span class="c1"># Function inside the archive which is to be called</span>
+<span class="w">  </span><span class="nt">timeoutms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120000</span><span class="w">         </span><span class="c1"># Timeout on the request to MATLAB Production Server</span>
+<span class="w">                            </span><span class="c1"># MessageBroker will log an error if the request</span>
+<span class="w">                            </span><span class="c1"># to MATLAB Production Server did not complete within</span>
+<span class="w">                            </span><span class="c1"># this time</span>
+
+<span class="c1"># Messaging connection and routing properties</span>
+<span class="nt">messageQueue</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">queue</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RabbitMQ</span><span class="w">          </span><span class="c1"># Name of the Queue on RabbitMQ Server</span>
+<span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">            </span><span class="c1"># Creates/verifies whether queue exists</span>
+<span class="w">    </span><span class="nt">durable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">          </span><span class="c1"># Work with a durable queue or not</span>
+<span class="w">    </span><span class="nt">exclusive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">        </span><span class="c1"># Work with an exclusive queue or not</span>
+<span class="w">    </span><span class="nt">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">       </span><span class="c1"># Work with an auto delete queue or not</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w">              </span><span class="c1"># Set additional arguments, can be omitted entirely</span>
+<span class="w">      </span><span class="nt">x-max-length</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span><span class="w">      </span><span class="c1"># For example, set the maximum queue length</span>
+<span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span><span class="w">           </span><span class="c1"># Hostname or IP of the RabbitMQ Server</span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5672</span><span class="w">                </span><span class="c1"># Port the RabbitMQ Server runs on</span>
+<span class="w">  </span><span class="nt">virtualhost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span><span class="w">            </span><span class="c1"># RabbitMQ Virtual Host</span>
+<span class="w">  </span><span class="nt">credentials</span><span class="p">:</span><span class="w"> </span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">guest</span><span class="w">         </span><span class="c1"># RabbitMQ username</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">guest</span><span class="w">         </span><span class="c1"># RabbitMQ password</span>
+<span class="w">  </span><span class="nt">exchange</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">amq.topic</span><span class="w">         </span><span class="c1"># Exchange to work with on RabbitMQ</span>
+<span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">            </span><span class="c1"># Creates/verifies whether exchange exists</span>
+<span class="w">    </span><span class="nt">durable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">           </span><span class="c1"># Work with a durable exchange or not</span>
+<span class="w">    </span><span class="nt">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">       </span><span class="c1"># Work with an auto delete exchange or not</span>
+<span class="w">    </span><span class="nt">internal</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">         </span><span class="c1"># Work with an internal exchange or not</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w">              </span><span class="c1"># Set additional arguments, can be omitted entirely</span>
+<span class="w">      </span><span class="nt">alternate-exchange</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-ea</span><span class="w"> </span><span class="c1"># For example alternate-exchange</span>
+<span class="w">  </span><span class="nt">routingkey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-topic</span><span class="w">    </span><span class="c1"># Routing key to subscribe to</span>
+</pre></div>
+</div>
+<div class="admonition note" id="noteoncreate">
+<p class="admonition-title">Note</p>
+<p>For both <code class="docutils literal notranslate"><span class="pre">queue</span></code> and <code class="docutils literal notranslate"><span class="pre">exchange</span></code>, <code class="docutils literal notranslate"><span class="pre">name</span></code> must be set and the <code class="docutils literal notranslate"><span class="pre">create</span></code> option has the following effects:</p>
+<ul class="simple">
+<li><p>If set to <code class="docutils literal notranslate"><span class="pre">false</span></code>:</p>
+<ul>
+<li><p>The broker will not try to create the queue or exchange with the specified <code class="docutils literal notranslate"><span class="pre">name</span></code>.
+They must already exist with the correct name on the server end for the broker to work
+correctly.</p></li>
+<li><p>The other settings (<code class="docutils literal notranslate"><span class="pre">durable</span></code>, <code class="docutils literal notranslate"><span class="pre">autoDelete</span></code>, etc.) are ignored entirely and can also simply
+be omitted from the configuration file then.</p></li>
+<li><p>This allows a certain flexibility if from the client end the exact configuration does
+not matter and is allowed to be set by the server or other clients entirely. Do <strong>not</strong> use this option
+if it is imperative for the client that the queue/exchange is configured with specific
+options. In that case set <code class="docutils literal notranslate"><span class="pre">create</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code> and specify the exact settings such that the broker will
+refuse to start if there is a configuration mismatch.</p></li>
+</ul>
+</li>
+<li><p>If set to <code class="docutils literal notranslate"><span class="pre">true</span></code>:</p>
+<ul>
+<li><p>The broker will ensure that the specified queue or exchange with the specific settings
+exists or error out:</p>
+<ul>
+<li><p>If there is no exchange/queue with the specified name yet, it is created with the
+settings as specified in the other properties (<code class="docutils literal notranslate"><span class="pre">durable</span></code>, <code class="docutils literal notranslate"><span class="pre">autoDelete</span></code>, etc.).</p></li>
+<li><p>If there is an exchange/queue with the specified name already, and the existing instance
+was created with the same settings (<code class="docutils literal notranslate"><span class="pre">durable</span></code>, <code class="docutils literal notranslate"><span class="pre">autoDelete</span></code>, etc.), the existing
+instance is used.</p></li>
+<li><p>If there is an exchange/queue with the specified name already, but there is a mismatch
+in settings the broker will error out and refuse to start.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>If indeed working with the MATLAB Compiler SDK MATLAB Production Server testing
+interface on your local machine configured as described in step 4, the <code class="docutils literal notranslate"><span class="pre">MATLAB</span>&#160; <span class="pre">Production</span> <span class="pre">Server</span> <span class="pre">connection</span> <span class="pre">properties</span></code> settings should be correct already.</p>
+</li>
+<li><p>To verify it is possible to successfully send a message to the RabbitMQ
+Server using this configuration, the <code class="docutils literal notranslate"><span class="pre">MessageSender</span></code> application can be used. It
+can be started using <code class="docutils literal notranslate"><span class="pre">MessageSenderStartup.bat</span></code> on Windows or using mvn on any
+system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mvn</span> <span class="n">exec</span><span class="p">:</span><span class="n">java</span> <span class="o">-</span><span class="n">Dexec</span><span class="o">.</span><span class="n">mainClass</span><span class="o">=</span><span class="n">com</span><span class="o">.</span><span class="n">mathworks</span><span class="o">.</span><span class="n">messaging</span><span class="o">.</span><span class="n">MessageSender</span> <span class="o">-</span><span class="n">Dexec</span><span class="o">.</span><span class="n">args</span><span class="o">=</span><span class="s2">&quot;src/main/resources/mps.yaml&quot;</span>
+</pre></div>
+</div>
+<p>In the client enter a message and routingkey, then in the RabbitMQ Admin Web Console
+verify that indeed a message was received on the configured <code class="docutils literal notranslate"><span class="pre">queue</span></code>. (Ctrl+C can be
+used to stop the application).</p>
+</li>
+<li><p>To complete the workflow, start <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> by running
+<code class="docutils literal notranslate"><span class="pre">MessageBrokerStartup.bat</span></code> on Windows or alternatively run it using mvn:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mvn</span> <span class="n">exec</span><span class="p">:</span><span class="n">java</span> <span class="o">-</span><span class="n">Dexec</span><span class="o">.</span><span class="n">mainClass</span><span class="o">=</span><span class="n">com</span><span class="o">.</span><span class="n">mathworks</span><span class="o">.</span><span class="n">messaging</span><span class="o">.</span><span class="n">MessageBroker</span> <span class="o">-</span><span class="n">Dexec</span><span class="o">.</span><span class="n">args</span><span class="o">=</span><span class="s2">&quot;src/main/resources/mps.yaml&quot;</span>
+</pre></div>
+</div>
+<p>This will receive messages from the message queue and then forward these to MATLAB
+Production Server to invoke the designated MATLAB <code class="docutils literal notranslate"><span class="pre">function</span></code>. The consumer will keep
+running, waiting for messages (Use Ctrl+C to stop the application).</p>
+</li>
+<li><p>Now when using <code class="docutils literal notranslate"><span class="pre">MessageSender</span></code> to send a message with the correct
+<code class="docutils literal notranslate"><span class="pre">routingkey</span></code> it should be received by <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> which should then call
+the MATLAB Production Server (test) server. If indeed working with the test
+server inside MATLAB, the message should be displayed in the MATLAB Command
+Window.</p></li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="MATLABInterface.html" class="btn btn-neutral float-left" title="RabbitMQ MATLAB Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Testing.html" class="btn btn-neutral float-right" title="Testing MATLAB and MATLAB Production Server Interface for RabbitMQ" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, MathWorks, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
