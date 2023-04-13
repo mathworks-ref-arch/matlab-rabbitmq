@@ -1,5 +1,27 @@
 # Release Notes
 
+## Release 0.3.3 (23th March 2023)
+* Added additional `arguments` option for queues and exchanges to allow 
+  setting further arguments.
+
+## Release 0.3.2 (17th March 2023)
+* Added additional configuration options for queues and exchanges. This allows
+  creating/working with durable or non-durable, internal or non-internal,
+  exclusive or non-exclusive queues and exchanges. This introduces a number of
+  breaking changes. If these additional configuration options are not needed,
+  there should simply be no need to update in which case there are no changes.
+  If these options are needed, configurations will have to be updated anyway to
+  configure them.
+* **BREAKING CHANGES**
+  * Requires MATLAB R2019b or newer instead of R2017b or newer.
+  * `queueName` configuration option/property has been removed. Instead there is
+    now a `queue` object with `name` property, as well as a few new properties.
+  * `exchange` configuration option/property is no longer just the exchange
+    name. Instead it is now an object with `name` property as well as a few new
+    properties.
+* Updated documentation format.
+* Published HTML documentation on GitHub pages.
+
 ## Release 0.2.0 (23rd March 2022)
 * Fixed library dependency conflicts and updated library dependencies
 * Renamed `MessageReceiver` to `MessageBroker` to underline the fact that the

@@ -27,28 +27,110 @@ When working with `rabbitmq.Producer` and `rabbitmq.Consumer` in MATLAB, various
 connection properties need to be specified. These can be specified with the help
 of the `rabbitmq.ConnectorProperties` class or using YAML configuration files.
 
-#### `rabbitmq.ConnectorProperties`
-`rabbitmq.ConnectorProperties` takes various Name-Value pairs as inputs. All
-options are optional, if not specified their default value is used.
+#### rabbitmq.ConnectorProperties class
 
-|Property Name      | Default Value | Description                           |
-|-------------------|---------------|---------------------------------------|
-|**'host'**         | 'localhost'   | Hostname or IP of the RabbitMQ Server |
-|**'port'**         | 5672          | Port the RabbitMQ Server runs on      |
-|**'virtualhost'**  | '/'           | RabbitMQ Virtual Host                 |
-|**'exchange'**     | 'amq.topic'   | Exchange to work with on RabbitMQ     |
-|**'queuename'**    | 'RabbitMQ'    | Name of the Queue on RabbitMQ Server  |
-|**'username'**     | 'guest'       | RabbitMQ username                     |
-|**'password'**     | 'guest'       | RabbitMQ password                     |
-|**'routingkey'**   | 'test-topic'  | Routing key to subscribe to or poll on - only used for Consumer, when working with Producer the routing key is specified on a per message basis when publishing a message |
+**rabbitmq.ConnectorProperties** has various properties:
 
-For example:
+:host: Hostname or IP of the RabbitMQ Server.\
+  *Default:* `"localhost"`
+:port: Port the RabbitMQ Server runs on.\
+  *Default:* `5672`
+:virtualhost: RabbitMQ Virtual Host.\
+  *Default:* `"/"`
+:exchange: Exchange to work with on RabbitMQ.\
+  *Default:* Default `rabbitmq.ExchangeProperties`
+:queue: Queue to work with on RabbitMQ Server.\
+  *Default:* Default `rabbitmq.QueueProperties`
+:credentials: RabbitMQ server credentials.\
+  *Default:* Default `rabbitmq.Credentials`
+:routingkey: Routing key to subscribe to or poll on - only used for Consumer, when working with Producer the routing key is specified on a per message basis when publishing a message.\
+  *Default:* ``"test-topic"``
+
+Where, as can be seen, properties `exchange`, `queue` and `credentials` are 
+in turn other MATLAB classes:
+
+**rabbitmq.ExchangeProperties**
+
+:name: Name of the exchange.\
+  *Default:* `"amq.topic"` 
+:type: Type of exchange.\
+  *Default:* `"topic"`
+:create: See [the note on create in MessageBroker](noteoncreate).\
+  *Default:* `true`
+:durable: Only relevant if ``create`` = ``true``, create a durable exchange or not\
+  *Default:* `true`
+:autoDelete: Only relevant if ``create`` = ``true``, create an autoDelete exchange or not\
+  *Default:* `false`
+:internal: Only relevant if ``create`` = ``true``, create an internal exchange or not\
+  *Default:* `false`
+:arguments: Only relevant if ``create`` = ``true``, allows setting additional arguments. Use the `put` method to add additional arguments. \
+  *Default:* Empty `HashMap`
+
+**rabbitmq.QueueProperties**
+
+:name: Name of the queue.\
+  *Default:* `"RabbitMQ"`
+:create: See See [the note on create in MessageBroker](noteoncreate).\
+  *Default:* `true`
+:durable: Only relevant if ``create`` = ``true``, create a durable queue or not.\
+  *Default:* `false`
+:exclusive: Only relevant if ``create`` = ``true``, create an exclusive queue or not.\
+  *Default:* `false`
+:autoDelete: Only relevant if ``create`` = ``true``, create an autoDelete queue or not.\
+  *Default:* `false`
+:arguments: Only relevant if ``create`` = ``true``, allows setting additional arguments. Use the `put` method to add additional arguments. \
+  *Default:* Empty `HashMap`
+
+**rabbitmq.Credentials**
+
+:username: Username\
+  *Default:* `"guest"`
+:password: Password\
+  *Default:* `"guest"`
+
+Setting properties values can be done through traditional MATLAB class syntax:
 
 ```matlab
-% Create a configuration with mostly default options but custom host and
-% routingkey settings
-configuration = rabbitmq.ConnectorProperties('host','myhost',...
-    'routingkey','my-key');```
+% Create an instance
+c  = rabbitmq.ConnectorProperties;
+% Set a property value
+c.host = "myHost";
+% Set a property of one of the "nested" settings
+c.queue.name = "myQueue";
+```
+
+But (with the exception of the `arguments` property) they can also be set by providing Name-Value pairs corresponding to property
+name and the value it is to be set to as inputs to the constructor.
+
+```matlab
+% Create instance and immediately set host to myHost and port to 1234
+c  = rabbitmq.ConnectorProperties("host","myHost","port",1234);
+```
+
+To immediately set "nested" settings, use the same trick on one of the nested 
+classes:
+
+```matlab
+% Create the QueueProperties with name and durable set
+qp = rabbitmq.QueueProperties("name","myQueue","durable",true);
+% Create ConnectorProperties with these QueueProperties set
+c  = rabbitmq.ConnectorProperties("queue",qp);
+
+% Or this could even be done one big single call then
+c = rabbitmq.ConnectorProperties("queue", ...
+    rabbitmq.QueueProperties("name","myQueue","durable",true));
+```
+
+To add additional arguments through the `arguments` property, use the put method:
+
+```matlab
+% Create QueueProperties with some properties already set
+c = rabbitmq.ConnectorProperties("queue", ...
+    rabbitmq.QueueProperties("name","myQueue","durable",true));
+% Then in a separate step add additional arguments, for example
+c.queue.arguments.put('x-max-length',42);
+% Similarly for exchange
+c.exchange.arguments.put('alternate-exchange', 'my-ea');
 ```
 
 #### Configuration Files
@@ -59,19 +141,33 @@ configuration file for the MATLAB Production Server interface:
 ```yaml
 # Messaging connection and routing properties
 messageQueue:
-    queueName: RabbitMQ       # Name of the Queue on RabbitMQ Server
-    host: localhost           # Hostname or IP of the RabbitMQ Server
-    port: 5672                # Port the RabbitMQ Server runs on
-    virtualhost: /            # RabbitMQ Virtual Host
-    credentials: 
-      username: guest         # RabbitMQ username
-      password: guest         # RabbitMQ password
-    exchange: amq.topic       # Exchange to work with on RabbitMQ
-    routingkey: test-topic    # Routing key to subscribe to or poll on,
-                              # only relevant/required/used when working with 
-                              # Consumer, when working with Producer, the 
-                              # routingkey is specified on a per message basis
-                              # when publishing the message
+  queue:
+    name: RabbitMQ          # Name of the Queue on RabbitMQ Server
+    create: true            # Creates/verifies whether queue exists
+    durable: false          # Work with a durable queue or not
+    exclusive: false        # Work with an exclusive queue or not
+    autoDelete: false       # Work with an auto delete queue or not
+    arguments:              # Set additional arguments, can be omitted entirely
+      x-max-length: 42      # For example, set the maximum queue length
+  host: localhost           # Hostname or IP of the RabbitMQ Server
+  port: 5672                # Port the RabbitMQ Server runs on
+  virtualhost: /            # RabbitMQ Virtual Host
+  credentials: 
+    username: guest         # RabbitMQ username
+    password: guest         # RabbitMQ password
+  exchange:
+    name: amq.topic         # Exchange to work with on RabbitMQ
+    create: true            # Creates/verifies whether exchange exists
+    durable: true           # Work with a durable exchange or not
+    autoDelete: false       # Work with an auto delete exchange or not
+    internal: false         # Work with an internal exchange or not
+    arguments:              # Set additional arguments, can be omitted entirely
+      alternate-exchange: my-ea # For example alternate-exchange
+  routingkey: test-topic    # Routing key to subscribe to
+```
+
+```{note}
+The `arguments` option can be omitted entirely for both `queue` and `exchange` if it is not necessary to set additional arguments. There is no fixed set of arguments which can be added and the entered argument names are not checked by the interface; they are passed on the server as-is. Check the RabbitMQ documentation to learn more about which exact arguments can be configured.
 ```
 
 ### RabbitMQ Producer for publishing messages `rabbitmq.Producer`
@@ -86,11 +182,11 @@ configuration = rabbitmq.ConnectorProperties();
 producer = rabbitmq.Producer(configuration);
 ```
 
-Then to send a message use `sendMessage` with a routingkey and the actual
+Then to send a message use `publish` with a routingkey and the actual
 message as input:
 
 ```matlab
-producer.sendMessage('my-routing-key','Hello World');
+producer.publish('my-routing-key','Hello World');
 ```
 
 ### RabbitMQ Consumer for receiving messages `rabbitmq.Consumer`
@@ -177,4 +273,4 @@ added to the *static* class path but there may be circumstances in which this is
 not possible and then it is loaded on the *dynamic* class path; this may make
 the event based consumer approach unavailable.
 
-[//]: #  (Copyright 2022 The MathWorks, Inc.)
+[//]: #  (Copyright 2022-2023 The MathWorks, Inc.)

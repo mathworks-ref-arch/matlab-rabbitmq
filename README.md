@@ -1,5 +1,5 @@
 # MATLAB and MATLAB Production Server Interface *for RabbitMQ*
-MATLAB&reg; and MATLAB Production Server&trade; Interface *for RabbitMQ™*
+MATLAB&reg; and MATLAB Production Server&trade; Interface *for RabbitMQ*
 provides an interface between MATLAB as well as MATLAB Production Server and
 RabbitMQ. RabbitMQ implements the Advanced Message Queuing Protocol (AMQP),
 standardizes messaging using Producers, Broker and Consumers as well as
@@ -8,8 +8,8 @@ increases loose coupling and scalability.
 ## Requirements
 
 ### MathWorks Products
-* MATLAB Release R2017b or later
-* MATLAB Production Server Release R2017b or later
+* MATLAB Release R2019b or later
+* MATLAB Production Server Release R2019b or later
 
 ### 3rd Party Products
 * RabbitMQ Server 3.7.15 or above. RabbitMQ Installation Guide –
@@ -43,6 +43,11 @@ these steps refer to
 [Documentation/MATLABInterface.md](Documentation/MATLABInterface.md) to learn
 more about the two separate features.
 
+## Documentation
+The main documentation for this package is available at:
+
+https://mathworks-ref-arch.github.io/matlab-rabbitmq
+
 ## Getting Started
 
 Please refer to the instructions below to get started. The documents provide
@@ -69,17 +74,17 @@ learn more on how to run included Java and MATLAB Unit Tests see
 
 
 ## Supported Products:
-1. [MATLAB&reg;](https://www.mathworks.com/products/matlab.html) (R2017b or
+1. [MATLAB&reg;](https://www.mathworks.com/products/matlab.html) (R2019b or
    later)
 2. [MATLAB Compiler™](https://www.mathworks.com/products/compiler.html) and
    [MATLAB Compiler
-   SDK™](https://www.mathworks.com/products/matlab-compiler-sdk.html) (R2017b or
+   SDK™](https://www.mathworks.com/products/matlab-compiler-sdk.html) (R2019b or
    later)
 3. [MATLAB Production
    Server™](https://www.mathworks.com/products/matlab-production-server.html)
-   (R2017b or later)
+   (R2019b or later)
 4. [MATLAB Parallel Server™](https://www.mathworks.com/products/distriben.html)
-   (R2017b or later)
+   (R2019b or later)
 
 ## License, API and Features
 The license for the MATLAB Interface for RabbitMQClient is available in the
@@ -96,5 +101,5 @@ https://www.mathworks.com/products/reference-architectures/request-new-reference
 ## Support
 Email: `mwlab@mathworks.com`    
 
-[//]: #  (Copyright 2019-2022 The MathWorks, Inc.)
+[//]: #  (Copyright 2019-2023 The MathWorks, Inc.)
 

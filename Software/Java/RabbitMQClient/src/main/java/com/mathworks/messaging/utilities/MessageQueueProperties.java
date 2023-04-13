@@ -13,10 +13,16 @@ public class MessageQueueProperties
 	private Integer port;
 	private String virtualhost;
 	private Credentials credentials;
-	private String exchange;
+	private ExchangeProperties exchange;
 	private String routingkey;
-	private String queueName;
+	private QueueProperties queue;
 	
+	public QueueProperties getQueue() {
+		return queue;
+	}
+	public void setQueue(QueueProperties queue) {
+		this.queue = queue;
+	}
 	/**
 	 * @return the protocol
 	 */
@@ -44,13 +50,13 @@ public class MessageQueueProperties
 	/**
 	 * @return the exchange
 	 */
-	public String getExchange() {
+	public ExchangeProperties getExchange() {
 		return exchange;
 	}
 	/**
 	 * @param exchange the exchange to set
 	 */
-	public void setExchange(String exchange) {
+	public void setExchange(ExchangeProperties exchange) {
 		this.exchange = exchange;
 	}
 	/**
@@ -83,12 +89,6 @@ public class MessageQueueProperties
 	}
 	public void setVirtualhost(String virtualhost) {
 		this.virtualhost = virtualhost;
-	}
-	public String getQueueName() {
-		return queueName;
-	}
-	public void setQueueName(String queueName) {
-		this.queueName = queueName;
 	}
 	
 }

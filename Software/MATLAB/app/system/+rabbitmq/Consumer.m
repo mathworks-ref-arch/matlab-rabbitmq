@@ -10,7 +10,7 @@ classdef Consumer < rabbitmq.object
 %
 %   MessageReceived - Raised when a message is received   
 
-% Copyright 2022 The MathWorks, Inc.
+% Copyright 2022-2023 The MathWorks, Inc.
     properties (Access=private)
         lh
     end
@@ -27,16 +27,26 @@ classdef Consumer < rabbitmq.object
             % 
             % The format of the YAML file is as follows:
             %
-            %     messageQueue:
-            %         queueName: RabbitMQ       # Name of the Queue on RabbitMQ Server
-            %         host: localhost           # Hostname or IP of the RabbitMQ Server
-            %         port: 5672                # Port the RabbitMQ Server runs on
-            %         virtualhost: /            # RabbitMQ Virtual Host
-            %         credentials: 
-            %           username: guest         # RabbitMQ username
-            %           password: guest         # RabbitMQ password
-            %         exchange: amq.topic       # Exchange to work with on RabbitMQ
-            %         routingkey: test-topic    # Routing key to subscribe to or poll on
+            %   messageQueue:
+            %     queue:
+            %       name: RabbitMQ          # Name of the Queue on RabbitMQ Server
+            %       create: true            # Creates/verifies whether queue exists
+            %       durable: false          # Work with a durable queue or not
+            %       exclusive: false        # Work with an exclusive queue or not
+            %       autoDelete: false       # Work with an auto delete queue or not
+            %     host: localhost           # Hostname or IP of the RabbitMQ Server
+            %     port: 5672                # Port the RabbitMQ Server runs on
+            %     virtualhost: /            # RabbitMQ Virtual Host
+            %     credentials: 
+            %       username: guest         # RabbitMQ username
+            %       password: guest         # RabbitMQ password
+            %     exchange:
+            %       name: amq.topic         # Exchange to work with on RabbitMQ
+            %       create: true            # Creates/verifies whether exchange exists
+            %       durable: true           # Work with a durable exchange or not
+            %       autoDelete: false       # Work with an auto delete exchange or not
+            %       internal: false         # Work with an internal exchange or not
+            %     routingkey: test-topic    # Routing key to subscribe to
             %
             %   There are two main Consumer approaches, an event based one
             %   or an approach where one can poll for new messages. The 

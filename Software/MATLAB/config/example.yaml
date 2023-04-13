@@ -1,10 +1,20 @@
 messageQueue:
-  queueName: RabbitMQ
+  queue:
+    name: RabbitMQ
+    create: true
+    durable: false
+    exclusive: false
+    autoDelete: false
   host: localhost
   port: 5672
   virtualhost: /
   credentials: 
     username: guest
     password: guest
-  exchange: amq.topic
+  exchange:
+    name: amq.topic
+    create: true
+    durable: true
+    autoDelete: false
+    internal: false    
   routingkey: test-topic

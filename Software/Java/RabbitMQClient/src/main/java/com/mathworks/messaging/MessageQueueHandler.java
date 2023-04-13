@@ -20,7 +20,9 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.mathworks.messaging.utilities.ConnectorProperties;
+import com.mathworks.messaging.utilities.ExchangeProperties;
 import com.mathworks.messaging.utilities.MPSClient;
+import com.mathworks.messaging.utilities.QueueProperties;
 import com.mathworks.utilities.OverrideHandler;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -32,9 +34,6 @@ public class MessageQueueHandler {
 
 	private Connection connection = null;
 	private Channel channel = null;
-	private String QUEUE_NAME = "";
-
-	private String host = "";
 	private ConnectorProperties properties = null;
 	private ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 	private ConnectionFactory factory = new ConnectionFactory();
@@ -85,8 +84,6 @@ public class MessageQueueHandler {
 		try {
 			// Read the YAML file
 			properties = mapper.readValue(fileName, ConnectorProperties.class);
-			QUEUE_NAME = properties.getMessageQueue().getQueueName();
-
 		} catch (Exception e) {
 			LOG.error("Unable to load config file", e);
 			throw e;
@@ -102,7 +99,6 @@ public class MessageQueueHandler {
 	 */
 	public void setConfig(ConnectorProperties p) throws Exception {
 		properties = p;
-		QUEUE_NAME = properties.getMessageQueue().getQueueName();
 	}
 
 	private void setupConnectionFactory() {
@@ -163,15 +159,34 @@ public class MessageQueueHandler {
 		// set up Message Queue Channel
 		try {
 			connection = factory.newConnection();
-			QUEUE_NAME = properties.getMessageQueue().getQueueName();
 			channel = connection.createChannel();
 			// set up Exchange/Queue Binding
-			channel.exchangeDeclare((String) OverrideHandler.getOverride("MESSAGEQUEUE_EXCHANGE",
-					properties.getMessageQueue().getExchange()), "topic", true);
-			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-			channel.queueBind(QUEUE_NAME,
+			if (properties.getMessageQueue().getExchange().isCreate()) {
+				ExchangeProperties ep = properties.getMessageQueue().getExchange();
+				channel.exchangeDeclare(
+					(String) OverrideHandler.getOverride("MESSAGEQUEUE_EXCHANGE",ep.getName()), 
+					ep.getType(),
+					ep.isDurable(),
+					ep.isAutoDelete(),
+					ep.getArguments()
+				);
+
+			}
+
+			if (properties.getMessageQueue().getQueue().isCreate()) {
+				QueueProperties qp = properties.getMessageQueue().getQueue();
+				channel.queueDeclare(
+					qp.getName(),
+					qp.isDurable(),
+					qp.isExclusive(),
+					qp.isAutoDelete(),
+					qp.getArguments()
+				);
+			}
+
+			channel.queueBind(properties.getMessageQueue().getQueue().getName(),
 					(String) OverrideHandler.getOverride("MESSAGEQUEUE_EXCHANGE",
-							properties.getMessageQueue().getExchange()),
+							properties.getMessageQueue().getExchange().getName()),
 					(String) OverrideHandler.getOverride("MESSAGEQUEUE_ROUTING_KEY",
 							properties.getMessageQueue().getRoutingkey()));
 
@@ -213,7 +228,7 @@ public class MessageQueueHandler {
 	 */
 	public void sendMessage(String routingKey, String message) throws UnsupportedEncodingException, IOException {
 		try {
-			channel.basicPublish(properties.getMessageQueue().getExchange(), routingKey, null,
+			channel.basicPublish(properties.getMessageQueue().getExchange().getName(), routingKey, null,
 					message.getBytes("UTF-8"));
 			LOG.info("Message Sent to RabbitMQ.", message);
 		} catch (Exception e) {
@@ -230,7 +245,7 @@ public class MessageQueueHandler {
 	 * @throws IOException
 	 */
 	public String pollMessage() throws IOException {
-		GetResponse r = channel.basicGet(QUEUE_NAME, true);
+		GetResponse r = channel.basicGet(properties.getMessageQueue().getQueue().getName(), true);
 		if (r == null)
 			return null;
 		return new String(r.getBody(), "UTF-8");
@@ -249,7 +264,7 @@ public class MessageQueueHandler {
 				notifyMessageReceived(message);
 			};
 
-			channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
+			channel.basicConsume(properties.getMessageQueue().getQueue().getName(), true, deliverCallback, consumerTag -> {
 			});
 
 		} catch (Exception e) {
@@ -274,7 +289,7 @@ public class MessageQueueHandler {
 				LOG.info("Message forwarded to MPS.", message);
 			};
 
-			channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
+			channel.basicConsume(properties.getMessageQueue().getQueue().getName(), true, deliverCallback, consumerTag -> {
 			});
 
 		} catch (Exception e) {
