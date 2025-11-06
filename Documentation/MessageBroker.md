@@ -122,45 +122,60 @@ the options to match your configuration.
     The `arguments` for `queue` and `exchange` will likely have to be removed, they are not often used and shown here mainly for illustrative purposes to show *where* these can be added *if* they are needed. There is no fixed set of arguments which can be added and argument names are not verified by `MessageBroker`; they are send to the server as-is. Check the RabbitMQ documentation to learn more about the argument its supports.
     ```
 
+    ```{note}
+    The `sslcontext` section should be omitted entirely if the amqp channel is not SSL/TLS secured at all. If the channel is SSL/TLS secured, the section must be present and the `server` section must be configured. The `client` section is optional; it must be configured if the server requires client certificates but is omitted if it does not. Also see [](./SSLTLS.md) to learn more about the SSL/TLS configuration.
+    ```
+
     ```yaml
     # MATLAB Production Server connection properties
     mps:
-      protocol: http            # Protocol used by the MPS Instance
-      host: localhost           # Hostname or IP of the MPS Instance
-      port: 9910                # Port the MPS Instance runs on
-      archive: demo             # Name of the CTF containing the function which
-                                # is to be called on MPS when a message received
-      function: MPSreceive      # Function inside the archive which is to be called
-      timeoutms: 120000         # Timeout on the request to MATLAB Production Server
-                                # MessageBroker will log an error if the request
-                                # to MATLAB Production Server did not complete within
-                                # this time
+      protocol: http                 # Protocol used by the MPS Instance
+      host: localhost                # Hostname or IP of the MPS Instance
+      port: 9910                     # Port the MPS Instance runs on
+      archive: demo                  # Name of the CTF containing the function which
+                                     # is to be called on MPS when a message received
+      function: MPSreceive           # Function inside the archive which is to be called
+      timeoutms: 120000              # Timeout on the request to MATLAB Production Server
+                                     # MessageBroker will log an error if the request
+                                     # to MATLAB Production Server did not complete within
+                                     # this time
 
     # Messaging connection and routing properties
     messageQueue:
       queue:
-        name: RabbitMQ          # Name of the Queue on RabbitMQ Server
-        create: true            # Creates/verifies whether queue exists
-        durable: false          # Work with a durable queue or not
-        exclusive: false        # Work with an exclusive queue or not
-        autoDelete: false       # Work with an auto delete queue or not
-        arguments:              # Set additional arguments, can be omitted entirely
-          x-max-length: 42      # For example, set the maximum queue length
-      host: localhost           # Hostname or IP of the RabbitMQ Server
-      port: 5672                # Port the RabbitMQ Server runs on
-      virtualhost: /            # RabbitMQ Virtual Host
+        name: RabbitMQ               # Name of the Queue on RabbitMQ Server
+        create: true                 # Creates/verifies whether queue exists
+        durable: false               # Work with a durable queue or not
+        exclusive: false             # Work with an exclusive queue or not
+        autoDelete: false            # Work with an auto delete queue or not
+        arguments:                   # Set additional arguments, can be omitted entirely
+          x-max-length: 42           # For example, set the maximum queue length
+      host: localhost                # Hostname or IP of the RabbitMQ Server
+      port: 5672                     # Port the RabbitMQ Server runs on
+      virtualhost: /                 # RabbitMQ Virtual Host
       credentials: 
-        username: guest         # RabbitMQ username
-        password: guest         # RabbitMQ password
+        username: guest              # RabbitMQ username
+        password: guest              # RabbitMQ password
       exchange:
-        name: amq.topic         # Exchange to work with on RabbitMQ
-        create: true            # Creates/verifies whether exchange exists
-        durable: true           # Work with a durable exchange or not
-        autoDelete: false       # Work with an auto delete exchange or not
-        internal: false         # Work with an internal exchange or not
-        arguments:              # Set additional arguments, can be omitted entirely
-          alternate-exchange: my-ea # For example alternate-exchange
-      routingkey: test-topic    # Routing key to subscribe to
+        name: amq.topic              # Exchange to work with on RabbitMQ
+        create: true                 # Creates/verifies whether exchange exists
+        durable: true                # Work with a durable exchange or not
+        autoDelete: false            # Work with an auto delete exchange or not
+        internal: false              # Work with an internal exchange or not
+        arguments:                   # Set additional arguments, can be omitted entirely
+          alternate-exchange: my-ea  # For example alternate-exchange
+      routingkey: test-topic         # Routing key to subscribe to
+      sslcontext:                    # SSL/TLS Configuration, omit this section entirely when not working with SSL
+        protocol: TLSv1.2            # Exact SSL/TLS protocol (version)
+        server:                      # Server trust store configuration
+          truststore: /some/location # Location of the trust store containing the server certificate chain
+          passphrase: rabbitstore    # Passphrase/password of the trust store
+          type: JKS                  # Type of trust store
+          hostnameVerification: true # Enable hostname verification
+        client:                      # Client Certificate Configuration. Omit this section entirely if your server does not require client certificates
+          keystore: /some/location   # Location of the keystore containing client certificate and private key
+          passphrase: supersecret    # Passphrase/password of the keystore
+          type: PKCS12               # Type of keystore      
     ```
 
     ```{note}

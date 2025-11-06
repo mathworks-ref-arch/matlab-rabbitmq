@@ -1,0 +1,11 @@
+services:
+  rabbitmq-for-matlab:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-for-matlab-unittest
+    ports: 
+      - 5672:5672
+      - 5671:5671
+      - 15672:15672 
+    volumes:
+      - ./certs:/certs
+      - ./etc/20-ssl.conf:/etc/rabbitmq/conf.d/20-ssl.conf

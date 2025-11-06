@@ -1,3 +1,7 @@
+/**
+ * (c) 2025 MathWorks, Inc.
+ */
+
 package com.mathworks.messaging.utilities;
 
 import java.util.HashMap;

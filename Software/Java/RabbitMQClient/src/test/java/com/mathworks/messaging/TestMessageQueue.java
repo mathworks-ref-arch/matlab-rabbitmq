@@ -14,7 +14,7 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-// Copyright 2022 The MathWorks
+// Copyright 2022-2025 The MathWorks
 
 public class TestMessageQueue {
     private MockWebServer server;
@@ -57,4 +57,29 @@ public class TestMessageQueue {
         // Clean up explicitly
         mqHandler.Dispose();
     }
+
+    @Test
+    public void testMessageQueueHandlerSSL() throws Exception {
+
+        assertEquals(9910,server.getPort());
+
+        // Create the MessageQueueHandler
+        MessageQueueHandler mqHandler = new MessageQueueHandler();
+        // Configure in the same way as in MessageBroker
+        mqHandler.setupConnectionFactoryFromConfig(new File("src/main/resources/mps_ssl.yaml"));
+        mqHandler.setupMessageChannel();
+        mqHandler.setupMPS();
+        mqHandler.receiveMessage();
+
+        // Send a message
+        mqHandler.sendMessage("test-topic", "hello");
+
+        // Verify that "MPS" was indeed called on the configured end-point
+        // within a reasonable amount of time, at least not block forever
+        RecordedRequest r = server.takeRequest(10,TimeUnit.SECONDS);
+        assertEquals("/demo/MPSreceive",r.getPath());
+
+        // Clean up explicitly
+        mqHandler.Dispose();
+    }    
 }

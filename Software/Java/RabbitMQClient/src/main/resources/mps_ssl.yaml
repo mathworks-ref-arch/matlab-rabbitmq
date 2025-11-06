@@ -1,0 +1,37 @@
+# MATLAB Production Server connection properties
+mps:
+  protocol: http
+  host: localhost
+  port: 9910
+  archive: demo
+  function: MPSreceive
+  timeoutms: 120000
+
+# Messaging connection and routing properties
+messageQueue:
+  queue:
+    name: RabbitMQ
+    create: true
+    durable: false
+    exclusive: false
+    autoDelete: false
+  host: localhost
+  port: 5671
+  virtualhost: /
+  credentials: 
+    username: guest
+    password: guest
+  exchange: 
+    name: amq.topic
+    create: true
+    durable: true
+    autoDelete: false
+    internal: false    
+  routingkey: test-topic
+  sslcontext:
+    server:
+      passphrase: rabbitstore
+      truststore: ../../../Test/certs/truststore
+    client:
+      passphrase: supersecret
+      keystore: ../../../Test/certs/client.p12

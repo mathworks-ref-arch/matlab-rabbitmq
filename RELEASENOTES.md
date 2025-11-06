@@ -1,5 +1,11 @@
 # Release Notes
 
+## Release 0.5.0 (November 2025)
+* Added SSL/TLS Support.
+
+## Release 0.4.0 (June 2023)
+* Added ability to set headers when publishing messages.
+
 ## Release 0.3.3 (23th March 2023)
 * Added additional `arguments` option for queues and exchanges to allow 
   setting further arguments.

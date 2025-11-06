@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
-			<version>5.16.0</version>
+			<version>5.27.1</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
@@ -92,6 +92,12 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.slf4j:slf4j-api</exclude>
+									<exclude>org.slf4j:slf4j-log4j12</exclude>
+                                </excludes>
+                            </artifactSet>
 							<outputDirectory>lib</outputDirectory>
 							<finalName>${project.artifactId}-${project.version}-full</finalName>
 							<filters>

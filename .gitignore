@@ -1,0 +1,6 @@
+.project
+/Release
+.vscode
+results.xml
+.buildtool/
+javaclasspath.txt

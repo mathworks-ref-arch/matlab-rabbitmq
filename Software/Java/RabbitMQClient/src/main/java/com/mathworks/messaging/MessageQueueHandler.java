@@ -1,18 +1,26 @@
 /**
  * MessageQueue Handler
  * 
- * 		   (c) 2019 MathWorks, Inc.
+ * 		   (c) 2019-2025 MathWorks, Inc.
  */
 
 package com.mathworks.messaging;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
+
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +29,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.mathworks.messaging.utilities.ConnectorProperties;
 import com.mathworks.messaging.utilities.ExchangeProperties;
+import com.mathworks.messaging.utilities.KeyManagerProperties;
 import com.mathworks.messaging.utilities.MPSClient;
 import com.mathworks.messaging.utilities.QueueProperties;
+import com.mathworks.messaging.utilities.SSLContextProperties;
+import com.mathworks.messaging.utilities.TrustManagerProperties;
 import com.mathworks.utilities.OverrideHandler;
+import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -101,7 +113,7 @@ public class MessageQueueHandler {
 		properties = p;
 	}
 
-	private void setupConnectionFactory() {
+	private void setupConnectionFactory() throws Exception {
 		// set up Message Queue Connection Factory
 		try {
 			factory.setUsername((String) OverrideHandler.getOverride("MESSAGEQUEUE_CREDENTIALS_USERNAME",
@@ -114,6 +126,44 @@ public class MessageQueueHandler {
 					(int) OverrideHandler.getOverride("MESSAGEQUEUE_PORT", properties.getMessageQueue().getPort()));
 			factory.setVirtualHost((String) OverrideHandler.getOverride("MESSAGEQUEUE_VIRTUAL_HOST",
 					properties.getMessageQueue().getVirtualhost()));
+
+			// Configure SSL *if* set
+			SSLContextProperties v = properties.getMessageQueue().getSslcontext();
+			if (v != null) {
+				
+				KeyManager[] kms = null;
+				TrustManager[] tms = null;
+				// Configure client certificate end if configured
+				KeyManagerProperties k = v.getClient();
+				if (k != null) {
+					char[] keyPassphrase = k.getPassphrase().toCharArray();
+					KeyStore ks = KeyStore.getInstance(k.getType());
+					ks.load(new FileInputStream(k.getKeystore()), keyPassphrase);
+
+					KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+					kmf.init(ks, keyPassphrase);	
+					kms = kmf.getKeyManagers();				
+				}
+				// Configure Server certificate end if configured
+				TrustManagerProperties t = v.getServer();
+				if (t != null) {
+					char[] trustPassphrase = t.getPassphrase().toCharArray();
+					KeyStore tks = KeyStore.getInstance(t.getType());
+					tks.load(new FileInputStream(t.getTruststore()), trustPassphrase);
+
+					TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+					tmf.init(tks);
+					tms = tmf.getTrustManagers();
+					
+					if (t.isHostnameVerification()) {
+						factory.enableHostnameVerification();
+					}
+				}
+				SSLContext c = SSLContext.getInstance(v.getProtocol());
+				c.init(kms, tms, null);
+				factory.useSslProtocol(c);
+
+			}
 
 		} catch (Exception e) {
 			LOG.error("Unable to set up Message Queue connection factory from config file", e);
@@ -237,6 +287,26 @@ public class MessageQueueHandler {
 			throw e;
 		}
 	}
+
+	/**
+	 * Publishes a message on the previously configured channel
+	 * @param routingKey
+	 * @param message
+	 * @param props
+	 * @throws UnsupportedEncodingException
+	 * @throws IOException
+	 */
+	public void sendMessage(String routingKey, AMQP.BasicProperties props, String message) throws UnsupportedEncodingException, IOException {
+		try {
+			channel.basicPublish(properties.getMessageQueue().getExchange().getName(), routingKey, props,
+					message.getBytes("UTF-8"));
+			LOG.info("Message Sent to RabbitMQ.", message);
+		} catch (Exception e) {
+
+			LOG.error("Unable to send message", e);
+			throw e;
+		}
+	}	
 
 	/**
 	 * Tries to pull a message on the previously configured message

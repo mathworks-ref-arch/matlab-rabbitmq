@@ -66,6 +66,29 @@ classdef Producer < rabbitmq.object
             %       producer.publish('my-topic','Hello World');
             obj.Handle.sendMessage(routingKey, message);
         end
+
+        function publishWithHeaders(obj, routingKey, headers, message)
+            % PUBLISHWITHHEADERS Publish a message with headers.
+            %
+            %   Example:
+            %
+            %       producer.publishWithHeaders('my-topic', ...
+            %           {'HeaderName1',HeaderValue1,'HeaderName2',HeaderValue2}, ...
+            %           'Hello World');
+            
+            % Create a HashMap with the header values
+            headerMap = java.util.HashMap;
+            for i=1:2:length(headers)
+                headerMap.put(headers{i},headers{i+1});
+            end
+            % Create a properties builder
+            propertiesBuilder = javaObject('com.rabbitmq.client.AMQP$BasicProperties$Builder');
+            % Set the header and build the properties
+            props = propertiesBuilder.headers(headerMap).build;
+            % Call send message with the properties
+            obj.Handle.sendMessage(routingKey, props, message);
+        end
+
     end
     
 end

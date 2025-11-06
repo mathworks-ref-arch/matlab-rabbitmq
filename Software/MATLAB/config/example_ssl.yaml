@@ -1,0 +1,27 @@
+messageQueue:
+  queue:
+    name: RabbitMQ
+    create: true
+    durable: false
+    exclusive: false
+    autoDelete: false
+  host: localhost
+  port: 5671
+  sslcontext:
+    server:
+      passphrase: rabbitstore
+      truststore: Test/certs/truststore
+    client:
+      passphrase: supersecret
+      keystore: Test/certs/client.p12
+  virtualhost: /
+  credentials: 
+    username: guest
+    password: guest
+  exchange:
+    name: amq.topic
+    create: true
+    durable: true
+    autoDelete: false
+    internal: false    
+  routingkey: test-topic

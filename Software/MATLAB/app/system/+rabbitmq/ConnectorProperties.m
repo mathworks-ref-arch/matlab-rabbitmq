@@ -47,6 +47,7 @@ classdef ConnectorProperties < rabbitmq.object
         exchange 
         routingkey 
         queue
+        sslcontext rabbitmq.SSLContextProperties
     end
    
     methods
@@ -59,6 +60,7 @@ classdef ConnectorProperties < rabbitmq.object
                 options.exchange = rabbitmq.ExchangeProperties
                 options.routingkey string = "test-topic"
                 options.queue = rabbitmq.QueueProperties
+                options.sslcontext 
             end
 
             cp = com.mathworks.messaging.utilities.ConnectorProperties;
@@ -99,6 +101,10 @@ classdef ConnectorProperties < rabbitmq.object
         function set.queue(obj,val)
             obj.Handle.getMessageQueue.setQueue(val.Handle);
             obj.queue = val;
+        end
+        function set.sslcontext(obj,val)
+            obj.Handle.getMessageQueue.setSslcontext(val.Handle);
+            obj.sslcontext = val;
         end
 
     end

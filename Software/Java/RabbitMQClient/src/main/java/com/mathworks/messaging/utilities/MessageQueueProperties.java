@@ -10,6 +10,7 @@ public class MessageQueueProperties
 	
 	private String protocol;
 	private String host;
+	
 	private Integer port;
 	private String virtualhost;
 	private Credentials credentials;
@@ -17,6 +18,14 @@ public class MessageQueueProperties
 	private String routingkey;
 	private QueueProperties queue;
 	
+	private SSLContextProperties sslcontext;
+
+	public SSLContextProperties getSslcontext() {
+		return sslcontext;
+	}
+	public void setSslcontext(SSLContextProperties sslcontext) {
+		this.sslcontext = sslcontext;
+	}
 	public QueueProperties getQueue() {
 		return queue;
 	}
