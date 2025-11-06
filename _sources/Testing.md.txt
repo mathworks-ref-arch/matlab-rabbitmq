@@ -2,33 +2,49 @@
 
 The MATLAB and MATLAB Production Server Interface *for RabbitMQ* package
 includes unit tests for both main features (`MessageBroker` and the MATLAB
-Interface). Both sets of tests require an actual RabbitMQ Server, setup in such
-a way that it is compatible with the configuration in
-[`mps.yaml`](Software/Java/RabbitMQClient/src/main/resources/mps.yaml) and the
-defaults as used by `rabbitmq.ConnectorProperties`. Luckily it is easy to run
-such a server. A locally run `rabbitmq:3-management` Docker image, matches this
-configuration.
+Interface). For both main features, non-SSL secured connections as well as
+SSL secured connections are tested. This requires a RabbitMQ Server instance
+configured with the correct certificates.
+
+The `Test` directory contains:
+
+* A script `generateCertificates.sh` which can be used to generate the correct set of certificates and private keys. 
+
+* `docker-compose.yml` as well as `20-ssl.conf` which allow running a correctly configured RabbitMQ server with SSL support in a Docker container using Docker Compose.
+
 
 ## Running Dockerized RabbitMQ Server for tests
-To start the server use:
 
-```
-docker run -d --rm --name rabbitmq-for-matlab -p 5672:5672 -p 15672:15672 rabbitmq:3-management
-```
+From a (bash) shell:
 
-Where `-p 5672:5672` exposes the main RabbitMQ port as used for actual messaging
-and `-p 15672:15672` exposes the Management Console, making it available on
-[http://localhost:15672/](http://localhost:15672/). `-d` runs the container as a
-daemon, `--rm` disposes the container after it has been stopped and `--name
-rabbitmq-for-matlab` is just to name the container to make it easier to stop.
+1.  cd into the `Test` directory:
 
-To stop it use:
+    ```console
+    $ cd Test
+    ```
 
-```
-docker stop rabbitmq-for-matlab
-```
+2.  Generate the set of certificates and private keys:
+
+    ```console
+    $ ./generateCertificates.sh
+    ```
+
+3.  Start the Docker container using Docker Compose:
+
+    ```console
+    $ docker compose up -d
+    ```
+
+4.  After testing has completed use:
+
+    ```console
+    $ docker compose down
+    ```
+
+    To stop the container again.
 
 ## Running Java Unit Tests
+
 To run the Java Unit Tests:
 ```
 cd Software/Java/RabbitMQClient
@@ -40,10 +56,10 @@ The MATLAB Unit Tests require the JAR file to have been loaded on the *static*
 Java class path. Both the polling- as well as the event based subscription
 approach are tested.
 
-Start MATLAB, then:
+Start MATLAB from the `Software/MATLAB` directory, then:
 
-```matlab
-cd Software/MATLAB/test
-runtests
+```matlabsession
+>> buildtool test
 ```
-[//]: #  (Copyright 2022 The MathWorks, Inc.)
+
+[//]: #  (Copyright 2022-2025 The MathWorks, Inc.)

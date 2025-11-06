@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SSL/TLS Configuration &mdash; MATLAB and MATLAB Production Server Interface for RabbitMQ  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/mathworks.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Testing MATLAB and MATLAB Production Server Interface for RabbitMQ" href="Testing.html" />
+    <link rel="prev" title="RabbitMQ MessageBroker for MATLAB Production Server" href="MessageBroker.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> MATLAB and MATLAB Production Server Interface for RabbitMQ
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">MATLAB and MATLAB Production Server Interface for RabbitMQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="MATLABInterface.html">RabbitMQ MATLAB Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MessageBroker.html">RabbitMQ <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> for MATLAB Production Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SSL/TLS Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#trust-store">Trust Store</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#key-store">Key Store</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Testing.html">Testing MATLAB and MATLAB Production Server Interface <em>for RabbitMQ</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="MessageQueueHandler.html">MessageQueueHandler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Release Notes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MATLAB and MATLAB Production Server Interface for RabbitMQ</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>SSL/TLS Configuration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/SSLTLS.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ssl-tls-configuration">
+<h1>SSL/TLS Configuration<a class="headerlink" href="#ssl-tls-configuration" title="Permalink to this heading"></a></h1>
+<p>RabbitMQ supports <a class="reference external" href="https://www.rabbitmq.com/docs/ssl">securing its (AMQP) channels using TLS</a>. If working with such a TLS secured endpoint, the MATLAB RabbitMQ interface or MATLAB Production Server MessageBroker must explicitly be configured for this, in such cases you must:</p>
+<ol class="arabic simple">
+<li><p>Provide a trust store containing the server certificate chain and/or trusted root CAs, and</p></li>
+<li><p>Optionally provide a keystore containing the client certificate and private key if your server requires client certificates.</p></li>
+</ol>
+<p>Since the MATLAB RabbitMQ interfaces build on top of the RabbitMQ Java libraries, the trust store and key store need to be provided in Java compatible formats. Typically the trust store is in <code class="docutils literal notranslate"><span class="pre">JKS</span></code> format (with no predefined extension) and the keystore can be provided as <code class="docutils literal notranslate"><span class="pre">PKCS12</span></code> file (typically with the <code class="docutils literal notranslate"><span class="pre">.pfx</span></code> or <code class="docutils literal notranslate"><span class="pre">.p12</span></code> extension).</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>The server administrators who secured the RabbitMQ server with TLS in the first place, can likely help you with obtaining the correct certificates and keys, and in the right formats.</p>
+<p>If you are not an expert in this area, it is typically recommended to reach out to the experts within your company rather than try to obtain and/or convert the certificates on your own.</p>
+<p>Nevertheless some further hints and tips are provided below.</p>
+</div>
+<section id="trust-store">
+<h2>Trust Store<a class="headerlink" href="#trust-store" title="Permalink to this heading"></a></h2>
+<p>The Trust Store needs to contain the actual server certificate and/or chain and/or root CA(s) of the server which you want to connect to. The Trust Store is typically provided in <code class="docutils literal notranslate"><span class="pre">JKS</span></code> format. If you have a certificate (chain) in PEM-format instead, you can use Java’s <code class="docutils literal notranslate"><span class="pre">keytool</span></code> to import it into a <code class="docutils literal notranslate"><span class="pre">JKS</span></code> Trust Store, for example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>keytool<span class="w"> </span>-importcert<span class="w"> </span>-file<span class="w"> </span>certificate.pem<span class="w"> </span>-keystore<span class="w"> </span>./mytruststore<span class="w"> </span>-storetype<span class="w"> </span>JKS
+</pre></div>
+</div>
+<p>This will import the certificate(s) from <code class="docutils literal notranslate"><span class="pre">certificate.pem</span></code> into a new store in the current directory named <code class="docutils literal notranslate"><span class="pre">mytruststore</span></code>. <code class="docutils literal notranslate"><span class="pre">keytool</span></code> will ask for a new passphrase/password with which to secure this trust store.</p>
+</section>
+<section id="key-store">
+<h2>Key Store<a class="headerlink" href="#key-store" title="Permalink to this heading"></a></h2>
+<p>If your server requires client certificates as well, you need to provide the client certificate and corresponding private key in the form of a <code class="docutils literal notranslate"><span class="pre">PKCS12</span></code> file; typically a file with <code class="docutils literal notranslate"><span class="pre">.p12</span></code> or <code class="docutils literal notranslate"><span class="pre">.pfx</span></code> extension. If you have the client certificate and corresponding key in two separate PEM-format files you will need to convert this to <code class="docutils literal notranslate"><span class="pre">PKCS12</span></code> format first, for example using the <code class="docutils literal notranslate"><span class="pre">openssl</span></code> commandline tool:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openssl<span class="w"> </span>pkcs12<span class="w"> </span>-export<span class="w"> </span>-out<span class="w"> </span>client.p12<span class="w"> </span>-inkey<span class="w"> </span>client_key.pem<span class="w"> </span>-in<span class="w"> </span>client_certificate.crt<span class="w"> </span>-CAfile<span class="w"> </span>CA.crt<span class="w"> </span>-chain
+</pre></div>
+</div>
+<p>This this the private key from the <code class="docutils literal notranslate"><span class="pre">client_key.pem</span></code> and certificate from <code class="docutils literal notranslate"><span class="pre">client_certificate.crt</span></code> and together with the CA certificate from <code class="docutils literal notranslate"><span class="pre">CA.crt</span></code> writes it out to <code class="docutils literal notranslate"><span class="pre">client.p12</span></code> in <code class="docutils literal notranslate"><span class="pre">PKCS12</span></code> format.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Depending on the version(s) of tooling used, the (relatively old) Java Runtime as included with MATLAB by default, may not be able to read the client private key from the PKCS12 file. In such cases you may need to configure MATLAB to work with a newer (OpenJDK) Java Runtime, see:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.mathworks.com/support/requirements/openjdk.html">https://www.mathworks.com/support/requirements/openjdk.html</a></p></li>
+<li><p><a class="reference external" href="https://www.mathworks.com/help/matlab/matlab_external/configure-your-system-to-use-java.html">https://www.mathworks.com/help/matlab/matlab_external/configure-your-system-to-use-java.html</a></p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="MessageBroker.html" class="btn btn-neutral float-left" title="RabbitMQ MessageBroker for MATLAB Production Server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Testing.html" class="btn btn-neutral float-right" title="Testing MATLAB and MATLAB Production Server Interface for RabbitMQ" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, MathWorks, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

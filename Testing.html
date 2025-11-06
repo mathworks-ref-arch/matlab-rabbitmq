@@ -24,7 +24,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="MessageQueueHandler" href="MessageQueueHandler.html" />
-    <link rel="prev" title="RabbitMQ MessageBroker for MATLAB Production Server" href="MessageBroker.html" /> 
+    <link rel="prev" title="SSL/TLS Configuration" href="SSLTLS.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -53,6 +53,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="SSLTLS.html">SSL/TLS Configuration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Testing MATLAB and MATLAB Production Server Interface <em>for RabbitMQ</em></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#running-dockerized-rabbitmq-server-for-tests">Running Dockerized RabbitMQ Server for tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-java-unit-tests">Running Java Unit Tests</a></li>
@@ -91,26 +92,40 @@
 <h1>Testing MATLAB and MATLAB Production Server Interface <em>for RabbitMQ</em><a class="headerlink" href="#testing-matlab-and-matlab-production-server-interface-for-rabbitmq" title="Permalink to this heading"></a></h1>
 <p>The MATLAB and MATLAB Production Server Interface <em>for RabbitMQ</em> package
 includes unit tests for both main features (<code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code> and the MATLAB
-Interface). Both sets of tests require an actual RabbitMQ Server, setup in such
-a way that it is compatible with the configuration in
-<a class="reference internal" href="#Software/Java/RabbitMQClient/src/main/resources/mps.yaml"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">mps.yaml</span></code></span></a> and the
-defaults as used by <code class="docutils literal notranslate"><span class="pre">rabbitmq.ConnectorProperties</span></code>. Luckily it is easy to run
-such a server. A locally run <code class="docutils literal notranslate"><span class="pre">rabbitmq:3-management</span></code> Docker image, matches this
-configuration.</p>
+Interface). For both main features, non-SSL secured connections as well as
+SSL secured connections are tested. This requires a RabbitMQ Server instance
+configured with the correct certificates.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Test</span></code> directory contains:</p>
+<ul class="simple">
+<li><p>A script <code class="docutils literal notranslate"><span class="pre">generateCertificates.sh</span></code> which can be used to generate the correct set of certificates and private keys.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> as well as <code class="docutils literal notranslate"><span class="pre">20-ssl.conf</span></code> which allow running a correctly configured RabbitMQ server with SSL support in a Docker container using Docker Compose.</p></li>
+</ul>
 <section id="running-dockerized-rabbitmq-server-for-tests">
 <h2>Running Dockerized RabbitMQ Server for tests<a class="headerlink" href="#running-dockerized-rabbitmq-server-for-tests" title="Permalink to this heading"></a></h2>
-<p>To start the server use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">--</span><span class="n">rm</span> <span class="o">--</span><span class="n">name</span> <span class="n">rabbitmq</span><span class="o">-</span><span class="k">for</span><span class="o">-</span><span class="n">matlab</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5672</span><span class="p">:</span><span class="mi">5672</span> <span class="o">-</span><span class="n">p</span> <span class="mi">15672</span><span class="p">:</span><span class="mi">15672</span> <span class="n">rabbitmq</span><span class="p">:</span><span class="mi">3</span><span class="o">-</span><span class="n">management</span>
+<p>From a (bash) shell:</p>
+<ol class="arabic">
+<li><p>cd into the <code class="docutils literal notranslate"><span class="pre">Test</span></code> directory:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>Test
 </pre></div>
 </div>
-<p>Where <code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">5672:5672</span></code> exposes the main RabbitMQ port as used for actual messaging
-and <code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">15672:15672</span></code> exposes the Management Console, making it available on
-<a class="reference external" href="http://localhost:15672/">http://localhost:15672/</a>. <code class="docutils literal notranslate"><span class="pre">-d</span></code> runs the container as a
-daemon, <code class="docutils literal notranslate"><span class="pre">--rm</span></code> disposes the container after it has been stopped and <code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">rabbitmq-for-matlab</span></code> is just to name the container to make it easier to stop.</p>
-<p>To stop it use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">stop</span> <span class="n">rabbitmq</span><span class="o">-</span><span class="k">for</span><span class="o">-</span><span class="n">matlab</span>
+</li>
+<li><p>Generate the set of certificates and private keys:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./generateCertificates.sh
 </pre></div>
 </div>
+</li>
+<li><p>Start the Docker container using Docker Compose:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+</pre></div>
+</div>
+</li>
+<li><p>After testing has completed use:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>down
+</pre></div>
+</div>
+<p>To stop the container again.</p>
+</li>
+</ol>
 </section>
 <section id="running-java-unit-tests">
 <h2>Running Java Unit Tests<a class="headerlink" href="#running-java-unit-tests" title="Permalink to this heading"></a></h2>
@@ -125,9 +140,8 @@ daemon, <code class="docutils literal notranslate"><span class="pre">--rm</span>
 <p>The MATLAB Unit Tests require the JAR file to have been loaded on the <em>static</em>
 Java class path. Both the polling- as well as the event based subscription
 approach are tested.</p>
-<p>Start MATLAB, then:</p>
-<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="n">Software</span><span class="o">/</span><span class="n">MATLAB</span><span class="o">/</span><span class="n">test</span>
-<span class="nb">runtests</span>
+<p>Start MATLAB from the <code class="docutils literal notranslate"><span class="pre">Software/MATLAB</span></code> directory, then:</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="n">buildtool</span><span class="w"> </span><span class="s">test</span>
 </pre></div>
 </div>
 </section>
@@ -137,7 +151,7 @@ approach are tested.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="MessageBroker.html" class="btn btn-neutral float-left" title="RabbitMQ MessageBroker for MATLAB Production Server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="SSLTLS.html" class="btn btn-neutral float-left" title="SSL/TLS Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="MessageQueueHandler.html" class="btn btn-neutral float-right" title="MessageQueueHandler" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

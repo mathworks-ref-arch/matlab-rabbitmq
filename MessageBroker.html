@@ -23,7 +23,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Testing MATLAB and MATLAB Production Server Interface for RabbitMQ" href="Testing.html" />
+    <link rel="next" title="SSL/TLS Configuration" href="SSLTLS.html" />
     <link rel="prev" title="RabbitMQ MATLAB Interface" href="MATLABInterface.html" /> 
 </head>
 
@@ -63,6 +63,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="SSLTLS.html">SSL/TLS Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Testing.html">Testing MATLAB and MATLAB Production Server Interface <em>for RabbitMQ</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="MessageQueueHandler.html">MessageQueueHandler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Release Notes</a></li>
@@ -213,44 +214,59 @@ the options to match your configuration.</p>
 <p class="admonition-title">Note</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">arguments</span></code> for <code class="docutils literal notranslate"><span class="pre">queue</span></code> and <code class="docutils literal notranslate"><span class="pre">exchange</span></code> will likely have to be removed, they are not often used and shown here mainly for illustrative purposes to show <em>where</em> these can be added <em>if</em> they are needed. There is no fixed set of arguments which can be added and argument names are not verified by <code class="docutils literal notranslate"><span class="pre">MessageBroker</span></code>; they are send to the server as-is. Check the RabbitMQ documentation to learn more about the argument its supports.</p>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">sslcontext</span></code> section should be omitted entirely if the amqp channel is not SSL/TLS secured at all. If the channel is SSL/TLS secured, the section must be present and the <code class="docutils literal notranslate"><span class="pre">server</span></code> section must be configured. The <code class="docutils literal notranslate"><span class="pre">client</span></code> section is optional; it must be configured if the server requires client certificates but is omitted if it does not. Also see <a class="reference internal" href="SSLTLS.html"><span class="std std-doc">SSL/TLS Configuration</span></a> to learn more about the SSL/TLS configuration.</p>
+</div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># MATLAB Production Server connection properties</span>
 <span class="nt">mps</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span><span class="w">            </span><span class="c1"># Protocol used by the MPS Instance</span>
-<span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span><span class="w">           </span><span class="c1"># Hostname or IP of the MPS Instance</span>
-<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9910</span><span class="w">                </span><span class="c1"># Port the MPS Instance runs on</span>
-<span class="w">  </span><span class="nt">archive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo</span><span class="w">             </span><span class="c1"># Name of the CTF containing the function which</span>
-<span class="w">                            </span><span class="c1"># is to be called on MPS when a message received</span>
-<span class="w">  </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MPSreceive</span><span class="w">      </span><span class="c1"># Function inside the archive which is to be called</span>
-<span class="w">  </span><span class="nt">timeoutms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120000</span><span class="w">         </span><span class="c1"># Timeout on the request to MATLAB Production Server</span>
-<span class="w">                            </span><span class="c1"># MessageBroker will log an error if the request</span>
-<span class="w">                            </span><span class="c1"># to MATLAB Production Server did not complete within</span>
-<span class="w">                            </span><span class="c1"># this time</span>
+<span class="w">  </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span><span class="w">                 </span><span class="c1"># Protocol used by the MPS Instance</span>
+<span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span><span class="w">                </span><span class="c1"># Hostname or IP of the MPS Instance</span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9910</span><span class="w">                     </span><span class="c1"># Port the MPS Instance runs on</span>
+<span class="w">  </span><span class="nt">archive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo</span><span class="w">                  </span><span class="c1"># Name of the CTF containing the function which</span>
+<span class="w">                                 </span><span class="c1"># is to be called on MPS when a message received</span>
+<span class="w">  </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MPSreceive</span><span class="w">           </span><span class="c1"># Function inside the archive which is to be called</span>
+<span class="w">  </span><span class="nt">timeoutms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120000</span><span class="w">              </span><span class="c1"># Timeout on the request to MATLAB Production Server</span>
+<span class="w">                                 </span><span class="c1"># MessageBroker will log an error if the request</span>
+<span class="w">                                 </span><span class="c1"># to MATLAB Production Server did not complete within</span>
+<span class="w">                                 </span><span class="c1"># this time</span>
 
 <span class="c1"># Messaging connection and routing properties</span>
 <span class="nt">messageQueue</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">queue</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RabbitMQ</span><span class="w">          </span><span class="c1"># Name of the Queue on RabbitMQ Server</span>
-<span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">            </span><span class="c1"># Creates/verifies whether queue exists</span>
-<span class="w">    </span><span class="nt">durable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">          </span><span class="c1"># Work with a durable queue or not</span>
-<span class="w">    </span><span class="nt">exclusive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">        </span><span class="c1"># Work with an exclusive queue or not</span>
-<span class="w">    </span><span class="nt">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">       </span><span class="c1"># Work with an auto delete queue or not</span>
-<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w">              </span><span class="c1"># Set additional arguments, can be omitted entirely</span>
-<span class="w">      </span><span class="nt">x-max-length</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span><span class="w">      </span><span class="c1"># For example, set the maximum queue length</span>
-<span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span><span class="w">           </span><span class="c1"># Hostname or IP of the RabbitMQ Server</span>
-<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5672</span><span class="w">                </span><span class="c1"># Port the RabbitMQ Server runs on</span>
-<span class="w">  </span><span class="nt">virtualhost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span><span class="w">            </span><span class="c1"># RabbitMQ Virtual Host</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RabbitMQ</span><span class="w">               </span><span class="c1"># Name of the Queue on RabbitMQ Server</span>
+<span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">                 </span><span class="c1"># Creates/verifies whether queue exists</span>
+<span class="w">    </span><span class="nt">durable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">               </span><span class="c1"># Work with a durable queue or not</span>
+<span class="w">    </span><span class="nt">exclusive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">             </span><span class="c1"># Work with an exclusive queue or not</span>
+<span class="w">    </span><span class="nt">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">            </span><span class="c1"># Work with an auto delete queue or not</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w">                   </span><span class="c1"># Set additional arguments, can be omitted entirely</span>
+<span class="w">      </span><span class="nt">x-max-length</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span><span class="w">           </span><span class="c1"># For example, set the maximum queue length</span>
+<span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span><span class="w">                </span><span class="c1"># Hostname or IP of the RabbitMQ Server</span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5672</span><span class="w">                     </span><span class="c1"># Port the RabbitMQ Server runs on</span>
+<span class="w">  </span><span class="nt">virtualhost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span><span class="w">                 </span><span class="c1"># RabbitMQ Virtual Host</span>
 <span class="w">  </span><span class="nt">credentials</span><span class="p">:</span><span class="w"> </span>
-<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">guest</span><span class="w">         </span><span class="c1"># RabbitMQ username</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">guest</span><span class="w">         </span><span class="c1"># RabbitMQ password</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">guest</span><span class="w">              </span><span class="c1"># RabbitMQ username</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">guest</span><span class="w">              </span><span class="c1"># RabbitMQ password</span>
 <span class="w">  </span><span class="nt">exchange</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">amq.topic</span><span class="w">         </span><span class="c1"># Exchange to work with on RabbitMQ</span>
-<span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">            </span><span class="c1"># Creates/verifies whether exchange exists</span>
-<span class="w">    </span><span class="nt">durable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">           </span><span class="c1"># Work with a durable exchange or not</span>
-<span class="w">    </span><span class="nt">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">       </span><span class="c1"># Work with an auto delete exchange or not</span>
-<span class="w">    </span><span class="nt">internal</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">         </span><span class="c1"># Work with an internal exchange or not</span>
-<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w">              </span><span class="c1"># Set additional arguments, can be omitted entirely</span>
-<span class="w">      </span><span class="nt">alternate-exchange</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-ea</span><span class="w"> </span><span class="c1"># For example alternate-exchange</span>
-<span class="w">  </span><span class="nt">routingkey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-topic</span><span class="w">    </span><span class="c1"># Routing key to subscribe to</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">amq.topic</span><span class="w">              </span><span class="c1"># Exchange to work with on RabbitMQ</span>
+<span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">                 </span><span class="c1"># Creates/verifies whether exchange exists</span>
+<span class="w">    </span><span class="nt">durable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">                </span><span class="c1"># Work with a durable exchange or not</span>
+<span class="w">    </span><span class="nt">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">            </span><span class="c1"># Work with an auto delete exchange or not</span>
+<span class="w">    </span><span class="nt">internal</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">              </span><span class="c1"># Work with an internal exchange or not</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w">                   </span><span class="c1"># Set additional arguments, can be omitted entirely</span>
+<span class="w">      </span><span class="nt">alternate-exchange</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-ea</span><span class="w">  </span><span class="c1"># For example alternate-exchange</span>
+<span class="w">  </span><span class="nt">routingkey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-topic</span><span class="w">         </span><span class="c1"># Routing key to subscribe to</span>
+<span class="w">  </span><span class="nt">sslcontext</span><span class="p">:</span><span class="w">                    </span><span class="c1"># SSL/TLS Configuration, omit this section entirely when not working with SSL</span>
+<span class="w">    </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TLSv1.2</span><span class="w">            </span><span class="c1"># Exact SSL/TLS protocol (version)</span>
+<span class="w">    </span><span class="nt">server</span><span class="p">:</span><span class="w">                      </span><span class="c1"># Server trust store configuration</span>
+<span class="w">      </span><span class="nt">truststore</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/some/location</span><span class="w"> </span><span class="c1"># Location of the trust store containing the server certificate chain</span>
+<span class="w">      </span><span class="nt">passphrase</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rabbitstore</span><span class="w">    </span><span class="c1"># Passphrase/password of the trust store</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">JKS</span><span class="w">                  </span><span class="c1"># Type of trust store</span>
+<span class="w">      </span><span class="nt">hostnameVerification</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"> </span><span class="c1"># Enable hostname verification</span>
+<span class="w">    </span><span class="nt">client</span><span class="p">:</span><span class="w">                      </span><span class="c1"># Client Certificate Configuration. Omit this section entirely if your server does not require client certificates</span>
+<span class="w">      </span><span class="nt">keystore</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/some/location</span><span class="w">   </span><span class="c1"># Location of the keystore containing client certificate and private key</span>
+<span class="w">      </span><span class="nt">passphrase</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">supersecret</span><span class="w">    </span><span class="c1"># Passphrase/password of the keystore</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PKCS12</span><span class="w">               </span><span class="c1"># Type of keystore      </span>
 </pre></div>
 </div>
 <div class="admonition note" id="noteoncreate">
@@ -327,7 +343,7 @@ Window.</p></li>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="MATLABInterface.html" class="btn btn-neutral float-left" title="RabbitMQ MATLAB Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Testing.html" class="btn btn-neutral float-right" title="Testing MATLAB and MATLAB Production Server Interface for RabbitMQ" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="SSLTLS.html" class="btn btn-neutral float-right" title="SSL/TLS Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

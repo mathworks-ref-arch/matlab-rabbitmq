@@ -45,8 +45,10 @@ of the `rabbitmq.ConnectorProperties` class or using YAML configuration files.
   *Default:* Default `rabbitmq.Credentials`
 :routingkey: Routing key to subscribe to or poll on - only used for Consumer, when working with Producer the routing key is specified on a per message basis when publishing a message.\
   *Default:* ``"test-topic"``
+:sslcontext: SSL/TLS Configuration. Leave empty if the AMQP connection does not use SSL.\
+  *Default:* Empty (0x0) `rabbitmq.SSLContextProperties`
 
-Where, as can be seen, properties `exchange`, `queue` and `credentials` are 
+Where, as can be seen, properties `exchange`, `queue`, `credentials` and `sslcontext` are 
 in turn other MATLAB classes:
 
 **rabbitmq.ExchangeProperties**
@@ -87,6 +89,38 @@ in turn other MATLAB classes:
   *Default:* `"guest"`
 :password: Password\
   *Default:* `"guest"`
+
+**rabbitmq.SSLContextProperties**
+
+:server: Server SSL Configuration. Required to be configured if the AMQP connection requires SSL.\
+  *Default:* Empty (0x0) `rabbitmq.TrustManagerProperties`
+
+:client: Client SSL Configuration. Required to be configured if the RabbitMQ server requires client certificates. Leave unset if the connection is SSL secured but without client certificates.\
+  *Default:* Empty (0x0) `rabbitmq.KeyManagerProperties`
+
+:protocol: SSL/TLS Protocol (version)\
+  *Default:* `"TLSv1.2"`
+
+**rabbitmq.TrustManagerProperties**
+
+:truststore: Location of the trust store containing the server certificate (chain) and/or trusted root CA(s).
+
+:passphrase: Passphrase/password of the trust store.
+
+:type: Type of trust store\
+  *Default:* `"JKS"`
+
+:hostnameVerification: Whether or not hostname verification is enabled. Generally should be left at its default `true`. Only temporarily disable this when debugging SSL/TLS connection issues.\
+  *Default:* `true`
+
+**rabbitmq.KeyManagerProperties**
+
+:keystore: Location of the keystore containing the client certificate and corresponding private key.
+
+:passphrase: Passphrase/password of the keystore.
+
+:type: Type of keystore.\
+  *Default:* `"PKCS12"`
 
 Setting properties values can be done through traditional MATLAB class syntax:
 
@@ -142,33 +176,52 @@ configuration file for the MATLAB Production Server interface:
 # Messaging connection and routing properties
 messageQueue:
   queue:
-    name: RabbitMQ          # Name of the Queue on RabbitMQ Server
-    create: true            # Creates/verifies whether queue exists
-    durable: false          # Work with a durable queue or not
-    exclusive: false        # Work with an exclusive queue or not
-    autoDelete: false       # Work with an auto delete queue or not
-    arguments:              # Set additional arguments, can be omitted entirely
-      x-max-length: 42      # For example, set the maximum queue length
-  host: localhost           # Hostname or IP of the RabbitMQ Server
-  port: 5672                # Port the RabbitMQ Server runs on
-  virtualhost: /            # RabbitMQ Virtual Host
-  credentials: 
-    username: guest         # RabbitMQ username
-    password: guest         # RabbitMQ password
-  exchange:
-    name: amq.topic         # Exchange to work with on RabbitMQ
-    create: true            # Creates/verifies whether exchange exists
-    durable: true           # Work with a durable exchange or not
-    autoDelete: false       # Work with an auto delete exchange or not
-    internal: false         # Work with an internal exchange or not
-    arguments:              # Set additional arguments, can be omitted entirely
-      alternate-exchange: my-ea # For example alternate-exchange
-  routingkey: test-topic    # Routing key to subscribe to
+    name: RabbitMQ               # Name of the Queue on RabbitMQ Server
+    create: true                 # Creates/verifies whether queue exists
+    durable: false               # Work with a durable queue or not
+    exclusive: false             # Work with an exclusive queue or not
+    autoDelete: false            # Work with an auto delete queue or not
+    arguments:                   # Set additional arguments, can be omitted entirely
+      x-max-length: 42           # For example, set the maximum queue length
+  host: localhost                # Hostname or IP of the RabbitMQ Server
+  port: 5672                     # Port the RabbitMQ Server runs on
+  virtualhost: /                 # RabbitMQ Virtual Host
+  credentials:     
+    username: guest              # RabbitMQ username
+    password: guest              # RabbitMQ password
+  exchange:    
+    name: amq.topic              # Exchange to work with on RabbitMQ
+    create: true                 # Creates/verifies whether exchange exists
+    durable: true                # Work with a durable exchange or not
+    autoDelete: false            # Work with an auto delete exchange or not
+    internal: false              # Work with an internal exchange or not
+    arguments:                   # Set additional arguments, can be omitted entirely
+      alternate-exchange: my-ea  # For example alternate-exchange
+  routingkey: test-topic         # Routing key to subscribe to
+  sslcontext:                    # SSL/TLS Configuration, omit this section entirely when not working with SSL
+    protocol: TLSv1.2            # Exact SSL/TLS protocol (version)
+    server:                      # Server trust store configuration
+      truststore: /some/location # Location of the trust store containing the server certificate chain
+      passphrase: rabbitstore    # Passphrase/password of the trust store
+      type: JKS                  # Type of trust store
+      hostnameVerification: true # Enable hostname verification
+    client:                      # Client Certificate Configuration. Omit this section entirely if your server does not require client certificates
+      keystore: /some/location   # Location of the keystore containing client certificate and private key
+      passphrase: supersecret    # Passphrase/password of the keystore
+      type: PKCS12               # Type of keystore
 ```
 
 ```{note}
 The `arguments` option can be omitted entirely for both `queue` and `exchange` if it is not necessary to set additional arguments. There is no fixed set of arguments which can be added and the entered argument names are not checked by the interface; they are passed on the server as-is. Check the RabbitMQ documentation to learn more about which exact arguments can be configured.
 ```
+
+```{note}
+The `sslcontext` section is omitted entirely if not working with an SSL secured endpoint. If working with an SSL secured endpoint, the `sslcontext` section must be added and the `server` section must be configured. The `client` section is optional; it is needed if your server requires client certificates but is omitted when client certificates are not required/used.
+```
+
+#### SSL/TLS Configuration
+
+More details about working with SSL/TLS secured channels can be found in [](./SSLTLS.md).
 
 ### RabbitMQ Producer for publishing messages `rabbitmq.Producer`
 To work with `rabbitmq.Producer` in MATLAB, first create an instance with
@@ -188,6 +241,18 @@ message as input:
 ```matlab
 producer.publish('my-routing-key','Hello World');
 ```
+
+And to send a message with headers use `publishWithHeaders` where headers are
+specified as a cell-array with pairs of values where the first value is the header
+name and the second value is the header value; repeat to set multiple headers. 
+For example:
+
+```matlab
+producer.publishWithHeaders('my-routing-key',...
+  {'FirstHeaderName',HeaderValue1,'SecondHeaderName',HeaderValue2},...
+  'Hello World');
+```
+
 
 ### RabbitMQ Consumer for receiving messages `rabbitmq.Consumer`
 `rabbitmq.Consumer` offers two approaches for receiving messages from RabbitMQ
@@ -273,4 +338,4 @@ added to the *static* class path but there may be circumstances in which this is
 not possible and then it is loaded on the *dynamic* class path; this may make
 the event based consumer approach unavailable.
 
-[//]: #  (Copyright 2022-2023 The MathWorks, Inc.)
+[//]: #  (Copyright 2022-2025 The MathWorks, Inc.)
